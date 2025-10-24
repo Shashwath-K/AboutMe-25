@@ -1,0 +1,224 @@
+/* Variables for colors */
+:root {
+  --muted: #94A3B8;
+  --success: #39d353;
+  --bg-dark: #0e0e14;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: #E2E8F0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 1rem;
+}
+
+/* Main Section Styles */
+.dev-stats-section .section-title {
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 2.5rem;
+  color: #E2E8F0;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+}
+
+/* Main Grid Layout */
+.dev-stats__grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr; /* Default to single column */
+}
+
+@media (min-width: 992px) {
+  .dev-stats__grid {
+    grid-template-columns: 2fr 1fr; /* Two columns on larger screens */
+  }
+}
+
+/* Individual "Smoking Glass" Card */
+.dev-card {
+  position: relative;
+  border-radius: 1.5rem;
+  background-color: rgba(25, 28, 35, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dev-card:hover {
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.6);
+}
+
+.dev-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px 30px #0e0e14;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.card-content {
+  position: relative;
+  z-index: 2;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Card Header Styles */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.card-header__user {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.card-header__avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 0.75rem;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.card-header__title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #E2E8F0;
+}
+.card-header__link, .card-header__subtitle, .card-header__meta {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.card-header__link:hover { text-decoration: underline; }
+.card-header__meta { text-align: right; }
+.card-header__icon {
+  width: 40px;
+  height: 40px;
+}
+
+/* Styles for the VS Code icon to apply a gradient mask */
+.icon--vscode {
+  background: linear-gradient(45deg, var(--success), #0e4429); /* Green gradient */
+  -webkit-mask-image: url('https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg');
+  mask-image: url('https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg');
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* GitHub Contribution Grid */
+.contrib-grid-wrapper {
+  margin-bottom: 2rem; /* No top margin by default */
+}
+.contrib-img {
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Add top margin to contribution graph ONLY on desktop */
+@media (min-width: 992px) {
+    .contrib-grid-wrapper {
+        margin-top: 4rem; /* 64px, equivalent to Tailwind's mt-16 */
+    }
+}
+
+/* GitHub Metrics */
+.metrics__grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: auto; /* Pushes to the bottom */
+  /* Force 3 columns per row */
+  grid-template-columns: repeat(3, 1fr);
+}
+.metric {
+  text-align: center;
+  background-color: rgba(0,0,0,0.2);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+}
+.metric__label {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.25rem;
+}
+.metric__value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #E2E8F0;
+}
+
+/* WakaTime Styles */
+.dev-stats__right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+/* WakaTime metrics grid layout */
+.wakatime-metrics {
+    grid-template-columns: 1fr; /* One column on mobile */
+    gap: 1.5rem;
+}
+/* Two columns on small screens and up */
+@media (min-width: 576px) {
+    .wakatime-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+/* Back to one column when it's in the sidebar layout */
+@media (min-width: 992px) {
+    .wakatime-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Socials Grid */
+.socials__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+  gap: 1rem;
+}
+.social__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.75rem;
+  font-size: 1.5rem;
+  color: #94A3B8;
+  background-color: rgba(30, 41, 59, 0.4);
+  transition: all 0.2s ease;
+}
+.social__btn:hover {
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px var(--hover-color, #fff);
+}
+.social__btn--github:hover { --hover-color: #A5B4FC; }
+.social__btn--linkedin:hover { --hover-color: #0A66C2; }
+.social__btn--twitter:hover { --hover-color: #1DA1F2; }
+.social__btn--instagram:hover { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.social__btn--spotify:hover { --hover-color: #1DB954; }
+.social__btn--youtube:hover { --hover-color: #FF0000; }
+.social__btn--facebook:hover { --hover-color: #1877F2; }
+.social__btn--discord:hover { --hover-color: #5865F2; }
+

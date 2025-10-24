@@ -1,0 +1,113 @@
+/* Main container for the single stacks section */
+.stack-section {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* The "Smoking Glass" Effect Container - Size reduced */
+.glass-container {
+  position: relative;
+  border-radius: 1.5rem; /* 24px */
+  padding: 2rem; /* Reduced padding */
+  background-color: rgba(25, 28, 35, 0.5); /* Darker, smoky base color */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+/* Blurred Edge Effect using a pseudo-element */
+.glass-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 40px 30px #0e0e14; 
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Main title for the entire section */
+.stack-title {
+  position: relative;
+  z-index: 2;
+  font-weight: 700;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  margin-bottom: 2.5rem; /* Increased space below main title */
+  color: #E2E8F0;
+  text-align: center;
+  text-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+}
+
+/* New 50:50 grid layout for the two columns */
+.stacks-grid {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 2.5rem; /* Space between the two columns */
+  grid-template-columns: 1fr; /* Default to a single column on mobile */
+}
+
+/* On screens wider than 768px, switch to two columns */
+@media (min-width: 768px) {
+  .stacks-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Title for each column (Tech/Misc) */
+.stack-column-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #94A3B8; /* slate-400 */
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  padding-bottom: 0.75rem;
+}
+
+/* Icons Grid Layout within each column */
+.icons-grid {
+  display: grid;
+  gap: 1rem; /* Reduced gap between icons */
+  /* Responsive columns - adjusts automatically */
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+}
+
+/* Individual Icon Wrapper - Size Reduced */
+.icon-wrapper {
+  position: relative;
+  display: flex;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  border-radius: 0.75rem; /* Reduced radius */
+  background: rgba(30, 41, 59, 0.4);
+  color: #94A3B8;
+  cursor: default;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Icon size reduced */
+.icon-wrapper .icon,
+.icon-wrapper .fallback-icon {
+  font-size: clamp(1.8rem, 7vw, 2.2rem); /* Reduced icon size */
+  line-height: 1;
+  transition: opacity 0.3s ease;
+}
+
+/* Icon Fallback Logic (no changes needed here) */
+.icon-wrapper .fallback-icon { display: none; }
+.icon-wrapper .icon:empty { display: none; }
+.icon-wrapper .icon:empty + .fallback-icon { display: inline-block; }
+
+/* Hover effect for icons */
+.icon-wrapper:hover {
+  color: var(--original-color);
+  background: rgba(30, 41, 59, 0.7);
+  box-shadow: 0 0 20px -5px var(--original-color);
+}
+
