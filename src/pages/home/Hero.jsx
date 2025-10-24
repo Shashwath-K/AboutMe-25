@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-
-// TODO: Create a CSS file at this path and move your 'hero.css'
-// styles into it. Then, uncomment the line below.
+// FIX 1: Corrected CSS import path. Assumes Hero.css is in the same folder.
 import './styles/Hero.css';
+import profile from '../../assets/avatar.JPG'
 
 // List of roles for the typewriter effect
 const roles = [
@@ -11,6 +10,25 @@ const roles = [
   "React & Flutter specialist",
   "Photographer & designer",
 ];
+
+// FIX 3: Added missing cursor animation CSS directly here
+const BlinkingCursorStyles = () => (
+  <style>
+    {`
+      .cursor-blink {
+        animation: blink 1s step-end infinite;
+      }
+      @keyframes blink {
+        from, to {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+    `}
+  </style>
+);
 
 const Hero = () => {
   const [typedText, setTypedText] = useState('');
@@ -43,7 +61,15 @@ const Hero = () => {
       }
     };
 
-    const typingSpeed = isDeleting ? 50 : 150;
+    // Adjust speed based on action
+    let typingSpeed = 150;
+    if (isDeleting) {
+      typingSpeed = 50;
+    } else if (charIndex + 1 === roles[roleIndex].length) {
+      // Pause at the end of the word
+      typingSpeed = 2000;
+    }
+
     const timer = setTimeout(type, typingSpeed);
 
     // Cleanup function
@@ -52,6 +78,9 @@ const Hero = () => {
 
   return (
     <section id="home" className="hero-section relative overflow-hidden">
+      {/* Add the cursor styles to the component */}
+      <BlinkingCursorStyles />
+
       {/* Matrix Background */}
       <div className="matrix-container absolute inset-0 z-0 pointer-events-none">
         <div className="matrix-pattern">
@@ -72,14 +101,15 @@ const Hero = () => {
           {/* Avatar */}
           <div className="md:col-span-4 flex justify-center md:justify-start">
             <div id="hero-avatar" className="avatar-container group relative select-none">
-              <div className="avatar-blur-edge absolute inset-0 z-0"></div>
+              {/* FIX 2: Changed 'avatar-blur-edge' to 'avatar-blur' to match Hero.css */}
+              <div className="avatar-blur absolute inset-0 z-0"></div>
               {/* Assumes avatar.JPG is in public/assets/ */}
               <div 
                 className="ambient-glow" 
-                style={{ backgroundImage: "url('/assets/avatar.JPG')" }}
+                style={{ backgroundImage: profile }}
               ></div>
               <img 
-                src="/assets/avatar.JPG" 
+                src={profile} 
                 alt="Shashwath avatar" 
                 className="avatar-image pointer-events-none" 
                 draggable={false} 
@@ -141,3 +171,4 @@ const Hero = () => {
 };
 
 export default Hero;
+

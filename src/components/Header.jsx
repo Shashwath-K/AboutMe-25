@@ -1,34 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+// Import NavLink, which is built for navigation bars
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import './components.css';
 
-// --- IMPORTANT ---
-// I'm assuming your logo is in 'src/assets/'.
-// If not, please adjust the path.
-// You'll need to create this folder structure: src/assets/header/
 // import logo from '../assets/header/light_mode_nav_sign.png'; // TODO: Add your logo to this path
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation(); // Gets the current route
-  const currentPath = location.pathname;
 
   // This effect closes the mobile menu if the user navigates to a new page
   useEffect(() => {
     setIsMenuOpen(false);
   }, [location]);
 
-  // Helper function to dynamically set active nav link class
-  const getNavLinkClass = (path) => {
-    const baseClasses = "relative hover:text-white transition duration-300 after:content-[''] after:absolute after:w-0 after:h-[2px] after:bg-green-500 after:left-0 after:-bottom-1 after:transition-all after:duration-300 hover:after:w-full";
-    return `${baseClasses} ${currentPath === path ? 'active-nav-link' : ''}`;
-  };
+  // We no longer need the getNavLinkClass or getMobileNavLinkClass functions,
+  // as NavLink's 'className' prop will handle this logic.
 
-  // Helper for mobile links
-  const getMobileNavLinkClass = (path) => {
-    const baseClasses = "text-lg text-white/90 hover:text-green-400 transition";
-    return `${baseClasses} ${currentPath === path ? 'active-nav-link-mobile' : ''}`;
-  };
+  // Define the nav items in an array to keep it DRY (Don't Repeat Yourself)
+  const navItems = [
+    { name: 'Projects', path: '/projects' },
+    { name: 'About', path: '/about' },
+    { name: 'Media', path: '/media' },
+    { name: 'Contact', path: '/contact' },
+  ];
 
   return (
     <header className="header fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-lg border-b border-white/10 shadow-lg" role="banner" aria-label="Main header">
@@ -42,11 +37,22 @@ const Header = () => {
         </Link>
 
         <nav id="desktop-nav" className="hidden lg:flex items-center space-x-8 font-medium">
-          {/* Use <Link> for internal navigation, not <a> */}
-          <Link to="/projects" className={getNavLinkClass('/projects')}>Projects</Link>
-          <Link to="/about" className={getNavLinkClass('/about')}>About</Link>
-          <Link to="/media" className={getNavLinkClass('/media')}>Media</Link>
-          <Link to="/contact" className={getNavLinkClass('/contact')}>Contact</Link>
+          {/* Map over the nav items.
+            We use NavLink's 'className' render prop.
+            It passes an 'isActive' boolean, which we use to
+            conditionally add our 'active-nav-link' class.
+          */}
+          {navItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `nav-link ${isActive ? 'active-nav-link' : ''}`
+              }
+            >
+              {item.name}
+            </NavLink>
+          ))}
         </nav>
 
         <button 
@@ -72,10 +78,20 @@ const Header = () => {
         id="mobile-nav" 
         className={`lg:hidden flex-col items-center space-y-6 py-8 bg-black/95 backdrop-blur-xl border-t border-white/10 ${isMenuOpen ? 'flex animate-slide-down' : 'hidden'}`}
       >
-        <Link to="/projects" className={getMobileNavLinkClass('/projects')}>Projects</Link>
-        <Link to="/about" className={getMobileNavLinkClass('/about')}>About</Link>
-        <Link to="/media" className={getMobileNavLinkClass('/media')}>Media</Link>
-        <Link to="/contact" className={getMobileNavLinkClass('/contact')}>Contact</Link>
+        {/* We do the same for the mobile links */}
+        {navItems.map((item, index) => (
+          <NavLink
+            key={item.path}
+            to={item.path}
+            className={({ isActive }) =>
+              `nav-link-mobile ${isActive ? 'active-nav-link-mobile' : ''} animate-slide-down-item`
+            }
+            // This applies the staggered animation from components.css
+            style={{ animationDelay: `${index * 0.05 + 0.05}s` }}
+          >
+            {item.name}
+          </NavLink>
+        ))}
       </nav>
     </header>
   );
