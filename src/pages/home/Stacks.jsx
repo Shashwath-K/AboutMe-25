@@ -1,7 +1,4 @@
 import React from 'react';
-
-// TODO: Create a CSS file at this path and move your 'stacks.css'
-// styles into it. Then, uncomment the line below.
 import './styles/Stacks.css';
 
 // --- Data for the two icon columns ---
