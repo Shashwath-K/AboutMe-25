@@ -1,5 +1,7 @@
 import React from 'react';
 import './styles/Stacks.css';
+import 'devicon/devicon.min.css';
+
 
 // --- Data for the two icon columns ---
 

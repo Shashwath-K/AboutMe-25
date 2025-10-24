@@ -1,31 +1,103 @@
 /* ========================================================================
 
-   styles/styles.css (Core Global Styles)
+
+   styles/styles.css (Core Global Styles + Enhancements)
+
 
    ======================================================================== */
 
 /* =========================
-   VARIABLES / THEME
+   VARIABLES / THEME & DARK MODE
    ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
-:root { --bg-900: #0b0b10; --bg-800: #0e0e14; --card: rgba(255,255,255,0.04); --glass-border: rgba(255,255,255,0.08); --muted: rgba(255,255,255,0.75); --muted-2: rgba(255,255,255,0.45); --text: #ffffff; --accent-1: #7c3aed; --accent-2: #06b6d4; --accent-3: linear-gradient(90deg, #7c3aed, #06b6d4); --success: #22c55e; --danger: #ff3b30; --shadow-soft: 0 8px 28px rgba(2,6,23,0.5); --glass-shadow: 0 10px 36px rgba(2,6,23,0.65); --glow: 0 12px 40px rgba(124,58,237,0.08); --radius-lg: 20px; --radius-md: 12px; --radius-sm: 8px; --ff-sans: "Montserrat"; --h1-size: clamp(2.2rem, 5vw, 3.6rem); --h2-size: clamp(1.4rem, 3vw, 2.2rem); --text-lg: 1.05rem; --header-height: 72px; --ease-smooth: cubic-bezier(.2,.9,.3,1); --fast: 180ms; --med: 360ms; --slow: 680ms; }
+/* Default (dark) theme */
+:root {
+  --bg-900: #0b0b10;
+  --bg-800: #0e0e14;
+  --bg-100: #efeff4;
+  --card: rgba(255,255,255,0.04);
+  --glass-border: rgba(255,255,255,0.08);
+  --muted: rgba(255,255,255,0.75);
+  --muted-2: rgba(255,255,255,0.45);
+  --text: #ffffff;
+  --accent-1: #7c3aed;
+  --accent-2: #06b6d4;
+  --accent-3: linear-gradient(90deg, #7c3aed, #06b6d4);
+  --success: #22c55e;
+  --danger: #ff3b30;
+  --shadow-soft: 0 8px 28px rgba(2,6,23,0.5);
+  --glass-shadow: 0 10px 36px rgba(2,6,23,0.65);
+  --glow: 0 12px 40px rgba(124,58,237,0.08);
+  --radius-lg: 20px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+  --ff-sans: "Montserrat";
+  --h1-size: clamp(2.2rem, 5vw, 3.6rem);
+  --h2-size: clamp(1.4rem, 3vw, 2.2rem);
+  --text-lg: 1.05rem;
+  --header-height: 72px;
+  --ease-smooth: cubic-bezier(.2,.9,.3,1);
+  --fast: 180ms;
+  --med: 360ms;
+  --slow: 680ms;
+}
 
-@media (prefers-reduced-motion: reduce) { :root { --fast: 1ms; --med: 1ms; --slow: 1ms; } }
+/* Light mode variant */
+body.light,
+:root.light-theme {
+  --bg-900: #efeff4;
+  --bg-800: #f8f9fb;
+  --card: rgba(0,0,0,0.01);
+  --glass-border: rgba(0,0,0,0.08);
+  --muted: #434343;
+  --muted-2: #909090;
+  --text: #111928;
+}
+
+/* Preference */
+@media (prefers-color-scheme: light) {
+  :root {
+    --bg-900: #efeff4;
+    --bg-800: #f8f9fb;
+    --card: rgba(0,0,0,0.01);
+    --glass-border: rgba(0,0,0,0.08);
+    --muted: #434343;
+    --muted-2: #909090;
+    --text: #111928;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --fast: 1ms; --med: 1ms; --slow: 1ms; }
+}
+
+
 
 /* =========================
    BASE RESET + LAYOUT
    ========================= */
-*,:before,:after{box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-html,body{height:100%;margin:0;background:var(--bg-800);color:var(--text);font-family:"Montserrat";line-height:1.5;scroll-behavior:smooth;}
+*,:before,:after{
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+html,body{
+  height: 100%;
+  margin: 0;
+  background: var(--bg-800);
+  color: var(--text);
+  font-family: var(--ff-sans);
+  line-height: 1.5;
+  scroll-behavior: smooth;
+  transition: background var(--med), color var(--med);
+}
 a{color:inherit;text-decoration:none;transition:all var(--fast) var(--ease-smooth);}
 a:hover{opacity:.92;transform:translateY(-1px);}
 
-/* Fix container padding (Chrome sometimes collapses it) */
-body .container {
-  padding-left: 2rem !important;
-  padding-right: 2rem !important;
-}
+
+/* Fix container padding */
+body .container { padding-left: 2rem !important; padding-right: 2rem !important; }
 .container {
   max-width: 1200px;
   width: 100%;
@@ -33,7 +105,7 @@ body .container {
   margin-right: auto;
   padding-left: 2rem;
   padding-right: 2rem;
-  display: block; /* makes margin:auto + padding reliable in Chrome */
+  display: block;
 }
 /* Namespace your container */
 .site-container {
@@ -43,47 +115,144 @@ body .container {
   width: 100%;
 }
 
-.section{padding:4.5rem 0;}
-.h-center{display:flex;align-items:center;justify-content:center;}
-.v-center{display:flex;align-items:center;}
-.text-muted{color:var(--muted-2);}
-.small{font-size:.82rem;}
-.badge{display:inline-flex;padding:.25rem .6rem;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);}
-h1{font-size:var(--h1-size);margin:.2rem 0 .6rem;letter-spacing:-0.02em;line-height:1.03;font-family:"Montserrat";}
-h2{font-size:var(--h2-size);margin:0 0 1rem;font-family:"Montserrat";}
-h3{font-size:1.05rem;margin:0 0 .4rem;font-family:"Montserrat";}
-.lead{font-size:var(--text-lg);color:var(--muted);font-family:"Montserrat";}
+.section { padding: 4.5rem 0; }
+.h-center { display: flex; align-items: center; justify-content: center; }
+.v-center { display: flex; align-items: center; }
+.text-muted { color: var(--muted-2); }
+.small { font-size: .82rem; }
+.badge {
+  display: inline-flex;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.02);
+}
+h1 { font-size: var(--h1-size); margin: .2rem 0 .6rem; letter-spacing: -0.02em; line-height: 1.03; font-family: var(--ff-sans);}
+h2 { font-size: var(--h2-size); margin: 0 0 1rem; font-family: var(--ff-sans);}
+h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
+.lead { font-size: var(--text-lg); color: var(--muted); font-family: var(--ff-sans); }
+
 
 /* =========================
-   HEADER / NAV
+   HEADER / NAV / TOGGLE
    ========================= */
-.header{position:fixed;top:0;left:0;width:100%;height:var(--header-height);z-index:1100;background:linear-gradient(180deg, rgba(11,11,16,0.65), rgba(11,11,16,0.35));backdrop-filter: blur(8px) saturate(120%);border-bottom:1px solid var(--glass-border);transition:backdrop-filter var(--med) var(--ease-smooth),transform var(--med) var(--ease-smooth);}
-.nav-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;max-width:1200px;margin:0 auto;}
-.brand{font-weight:700;letter-spacing:-0.02em;font-size:1.05rem;font-family:"Montserrat";}
-.nav-links{display:flex;gap:1rem;align-items:center;}
-.nav-links a{padding:.45rem .6rem;border-radius:10px;color:rgba(255,255,255,0.92);font-weight:600;font-family:"Montserrat";}
-.menu-btn{display:none;border:1px solid var(--glass-border);padding:.45rem .6rem;border-radius:10px;background:rgba(255,255,255,0.02);font-family:"Montserrat";}
-@media (max-width:880px){.nav-links{display:none;}.menu-btn{display:inline-flex;}}
-.header--small{transform:translateY(-6px) scale(.995);filter:saturate(.95);}
 
 /* =========================
-   GLOBAL COMPONENTS
+   BACK TO TOP BUTTON
    ========================= */
-.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.1rem;border-radius:14px;font-weight:700;background:var(--accent-1);color:#fff;box-shadow:var(--glow);transition:transform var(--fast) var(--ease-smooth),box-shadow var(--fast);font-family:"Montserrat";}
-.btn.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
-.btn.ghost{background:transparent;border:0;color:var(--text);}
+.backToTopBtn {
+  position: fixed;
+  bottom: 2.4rem;
+  right: 2.4rem;
+  padding: .62rem 1.3rem;
+  font-size: 1.15rem;
+  border-radius: var(--radius-md);
+  border: none;
+  background: var(--accent-3);
+  color: #fff;
+  box-shadow: var(--shadow-soft);
+  transition: background .18s, box-shadow .22s, opacity .22s;
+  opacity: 0.85;
+  z-index: 3000;
+}
+.backToTopBtn:hover {
+  background: var(--accent-1);
+  opacity: 1;
+  box-shadow: 0 12px 28px rgba(124,58,237,0.16);
+}
 
-/* Glass / Card Pattern */
-.glass{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius-md);border:1px solid var(--glass-border);padding:1.1rem;box-shadow:var(--glass-shadow);backdrop-filter: blur(10px) saturate(120%);transition: background .36s var(--ease-smooth), box-shadow .36s var(--ease-smooth), transform .28s var(--ease-smooth), backdrop-filter .36s var(--ease-smooth);}
-.glass:hover{background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));backdrop-filter: blur(6px) saturate(160%);box-shadow: 0 30px 80px rgba(2,6,23,0.7);}
-.glass-clear{background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.06);backdrop-filter: blur(6px) saturate(140%);box-shadow:0 20px 60px rgba(2,6,23,0.6);}
 
-/* Forms / Inputs */
-.input, textarea { width:100%; padding:.7rem .9rem; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); color:var(--text); font-family:"Montserrat"; }
+/* =========================
+   GLASS / STACKED CARDS
+   ========================= */
+.glass {
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--radius-md);
+  border: 1px solid var(--glass-border);
+  padding: 1.1rem;
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(10px) saturate(120%);
+  transition: background .36s var(--ease-smooth), box-shadow .36s var(--ease-smooth),
+    transform .28s var(--ease-smooth), backdrop-filter .36s var(--ease-smooth);
+}
+.glass-stack {
+  position: relative;
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
+  box-shadow: 0 16px 40px rgba(6,27,85,0.12);
+}
+.glass:hover {
+  background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+  backdrop-filter: blur(6px) saturate(160%);
+  box-shadow: 0 30px 80px rgba(2,6,23,0.7);
+}
+.glass-clear {
+  background: linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.06);
+  backdrop-filter: blur(6px) saturate(140%);
+  box-shadow: 0 20px 60px rgba(2,6,23,0.6);
+}
+
+
+/* =========================
+   ICON GRID AND STACKS
+   ========================= */
+.icons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(78px, 1fr));
+  gap: 1.15rem;
+  margin-top: 0.8rem;
+  justify-items: center;
+}
+.icon-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: .32rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.03);
+  box-shadow: 0 1px 10px rgba(124,58,237,0.04);
+  transition: background .22s, box-shadow .32s;
+}
+.icon-wrapper:hover {
+  background: var(--accent-3);
+  box-shadow: 0 10px 36px rgba(6,27,85,0.14);
+}
+.icon {
+  font-size: 2.1rem;
+  color: var(--original-color, var(--accent-1));
+  transition: color .22s;
+}
+.fallback-icon {
+  font-size: 2rem;
+  color: var(--muted-2);
+  opacity: 0.66;
+  position: absolute;
+  top: 0.35rem;
+  left: 50%;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+
+/* =========================
+   GLOBAL COMPONENTS, BUTTONS
+   ========================= */
+.btn {display:inline-flex;align-items:center;gap:.6rem;padding:.7rem 1.1rem;border-radius:14px;font-weight:700;background:var(--accent-1);color:#fff;box-shadow:var(--glow);transition:transform var(--fast) var(--ease-smooth),box-shadow var(--fast);font-family:var(--ff-sans);}
+.btn.secondary {background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
+.btn.ghost {background:transparent;border:0;color:var(--text);}
+.btn:focus {outline:2px solid var(--accent-2);}
+
+
+/* =========================
+   FORMS / INPUTS
+   ========================= */
+.input, textarea { width:100%; padding:.7rem .9rem; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); color:var(--text); font-family:var(--ff-sans);}
 .input:focus, textarea:focus { outline:none; box-shadow:0 6px 20px rgba(12,10,30,0.45); border-color:rgba(124,58,237,0.7); }
 
+
 /* =========================
-   GLOBAL UTILITIES
+   ANIMATED UTILITIES
    ========================= */
 .fade-in{opacity:0;transform:translateY(6px);animation:fadeIn var(--med) var(--ease-smooth) forwards;}
 @keyframes fadeIn{to{opacity:1;transform:none;}}
@@ -92,13 +261,15 @@ h3{font-size:1.05rem;margin:0 0 .4rem;font-family:"Montserrat";}
 .wiggle{display:inline-block;transform-origin:center;animation:wiggleAnim 3s infinite ease-in-out;}
 @keyframes wiggleAnim{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(0)}75%{transform:rotate(1deg)}100%{transform:rotate(0)}}
 
+
 /* Marquee */
-.animate-marquee{display:flex;animation:marquee 28s linear infinite;gap:2rem;align-items:center;font-family:"Montserrat";}
+.animate-marquee{display:flex;animation:marquee 28s linear infinite;gap:2rem;align-items:center;font-family:var(--ff-sans);}
 .animate-marquee:hover{animation-play-state:paused;}
 @keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
+
 /* Helpers */
-.kicker{font-size:.85rem;color:var(--muted-2);text-transform:uppercase;letter-spacing:0.08em;font-family:"Montserrat";}
+.kicker{font-size:.85rem;color:var(--muted-2);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--ff-sans);}
 .center{display:flex;align-items:center;justify-content:center;}
 .col{display:flex;flex-direction:column;}
 .row{display:flex;flex-direction:row;}
@@ -109,10 +280,9 @@ h3{font-size:1.05rem;margin:0 0 .4rem;font-family:"Montserrat";}
 .rounded-lg{border-radius:var(--radius-lg);}
 .vignette::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(60% 60% at 50% 30%, rgba(0,0,0,0), rgba(0,0,0,0.6));}
 .accent-outline{box-shadow:0 6px 28px rgba(6,27,85,0.12);border-radius:12px;}
+.visually-hidden {position:absolute!important;clip:rect(1px,1px,1px,1px)!important;}
 
-/* =========================
-   ACCESSIBILITY & PRINT
-   ========================= */
+
 @media (prefers-reduced-motion: reduce){
   *,*:before,*:after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important;}
 }

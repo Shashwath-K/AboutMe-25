@@ -1,5 +1,4 @@
 import React from 'react';
-import './components.css';
 const Footer = () => {
   return (
     <footer id="contact" className="footer glass rounded-t-[20%]">
