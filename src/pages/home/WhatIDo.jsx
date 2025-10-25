@@ -1,31 +1,36 @@
 import React from 'react';
-
-// TODO: Create a CSS file at this path and move your 'what-i-do.css'
-// styles into it. Then, uncomment the line below.
 import './styles/WhatIDo.css';
 
-// We define the card data as an array of objects
+// 1. CHANGED: Import alternative icons (e.g., from Font Awesome)
+import { 
+  FaCode,         // Replaces SiVisualstudiocode
+  FaCamera,       // Replaces SiAdobephotoshop
+  FaFilm,         // Replaces SiAdobepremierepro
+  FaPencilRuler   // Replaces SiFigma
+} from 'react-icons/fa';
+
+// 2. CHANGED: Updated the 'services' array with the new icon components
 const services = [
   {
-    icon: 'si-visualstudiocode',
+    icon: <FaCode />,
     wrapperClass: 'card__icon-wrapper--dev',
     title: 'Web & Mobile Dev',
     text: 'Responsive apps using React, Next.js, and Flutter.'
   },
   {
-    icon: 'si-adobephotoshop',
+    icon: <FaCamera />,
     wrapperClass: 'card__icon-wrapper--photo',
     title: 'Photographer',
     text: 'Capturing editorial and product moments with impact.'
   },
   {
-    icon: 'si-adobepremierepro',
+    icon: <FaFilm />,
     wrapperClass: 'card__icon-wrapper--editor',
     title: 'Editor',
     text: 'Video/audio polishing, color grading, and motion graphics.'
   },
   {
-    icon: 'si-figma',
+    icon: <FaPencilRuler />,
     wrapperClass: 'card__icon-wrapper--design',
     title: 'Designer',
     text: 'Crafting intuitive UI/UX, branding, and design systems.'
@@ -38,12 +43,14 @@ const WhatIDo = () => {
       <h2 className="section-title">What I Do</h2>
       <div className="what-i-do-grid">
         
-        {/* We map over the services array to render each card */}
         {services.map((service, index) => (
           <div className="what-i-do-card" key={index}>
             <div className="card-content">
               <div className={`card__icon-wrapper ${service.wrapperClass}`}>
-                <i className={`si ${service.icon}`}></i>
+                
+                {/* This part remains the same, rendering the icon component */}
+                {service.icon} 
+                
               </div>
               <h4 className="card__title">{service.title}</h4>
               <p className="card__text">{service.text}</p>

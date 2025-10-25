@@ -103,7 +103,11 @@
 .icon-wrapper .fallback-icon { display: none; }
 .icon-wrapper .icon:empty { display: none; }
 .icon-wrapper .icon:empty + .fallback-icon { display: inline-block; }
-
+.icon-wrapper svg {
+  font-size: clamp(1.8rem, 7vw, 2.2rem); /* Reduced icon size */
+  line-height: 1;
+  transition: opacity 0.3s ease;
+}
 /* Hover effect for icons */
 .icon-wrapper:hover {
   color: var(--original-color);

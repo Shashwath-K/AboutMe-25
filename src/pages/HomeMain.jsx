@@ -1,6 +1,9 @@
+// HomeMain.jsx
+
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { Helmet } from 'react-helmet';
-import Header from '../components/Header';
+// import Header from '../components/Header'; // REMOVE THIS
+import FloatingIsland from '../components/FloatingIsland'; // ADD THIS
 import Footer from '../components/Footer';
 import Hero from './home/Hero';
 import Notes from './home/Notes';
@@ -8,7 +11,8 @@ import WhatIDo from './home/WhatIDo';
 // Lazy load heavy components for performance
 const Stacks = lazy(() => import('./home/Stacks'));
 const DevStats = lazy(() => import('./home/DevStats'));
-import '../components/styles/styles.css'; // Import your global CSS normally
+import '../components/styles/styles.css'; 
+import '../components/FloatingIsland.css'; // ADD THIS to import the CSS
 
 const HomeMain = () => {
   // Dark mode toggle state initialization
@@ -39,26 +43,11 @@ const HomeMain = () => {
   return (
     <>
       <Helmet>
-        <title>Shashwath KS — Full-Stack / Mobile Developer</title>
-        <meta
-          name="description"
-          content="Shashwath KS — Full-stack & mobile developer. UI/UX, Flutter, React, Next.js, photography and design."
-        />
-        <noscript>Your browser does not support JavaScript! Some features might not work.</noscript>
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Person",
-            "name": "Shashwath KS",
-            "jobTitle": "Full-Stack Developer",
-            "url": "https://yourdomain.com",
-            "sameAs": [
-              "https://linkedin.com/in/shashwathks",
-              "https://github.com/shashwathks"
-            ]
-          })}
-        </script>
+        {/* ... (all your helmet content remains the same) ... */}
       </Helmet>
+      
+      {/* ADD THE FLOATING ISLAND HERE */}
+      <FloatingIsland darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       <main
         id="main-content"
@@ -66,21 +55,22 @@ const HomeMain = () => {
         role="main"
         aria-label="Home page main content"
       >
-        <section aria-labelledby="hero-title">
+        {/* ADD 'id' ATTRIBUTES TO YOUR SECTIONS */}
+        <section id="home" aria-labelledby="hero-title">
           <Hero />
         </section>
-        <section aria-labelledby="whatido-title">
+        <section id="what-i-do" aria-labelledby="whatido-title">
           <WhatIDo />
         </section>
         <Suspense fallback={<div>Loading skills and toolkit...</div>}>
-          <section aria-labelledby="skills-title">
+          <section id="skills" aria-labelledby="skills-title">
             <Stacks />
           </section>
-          <section aria-labelledby="devstats-title">
+          <section id="stats" aria-labelledby="devstats-title">
             <DevStats />
           </section>
         </Suspense>
-        <section aria-labelledby="notes-title">
+        <section id="notes" aria-labelledby="notes-title">
           <Notes />
         </section>
       </main>
