@@ -1,35 +1,40 @@
 import React, { useState, useEffect } from 'react';
+// import '../scripts/waka_hours.js'; // 1. REMOVED: We'll add this logic inside the component
+import './styles/DevStats.css';
 
-// TODO: Create a CSS file at this path and move your 'dev-stats.css'
-// styles into it. Then, uncomment the line below.
- import './styles/DevStats.css';
+// 2. CHANGED: Removed SiTwitter, Added SiX
+import {
+  SiGithub, SiLinkedin, SiX, SiInstagram, SiSpotify,
+  SiYoutube, SiFacebook, SiDiscord
+} from 'react-icons/si';
 
 // --- GitHub Config ---
 const GITHUB_USERNAME = "Shashwath-K";
+// (GitHub URLs remain the same)
 const GITHUB_API_URL = `https://api.github.com/users/${GITHUB_USERNAME}`;
 const GITHUB_REPOS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100`;
 const GITHUB_EVENTS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`;
 
 // --- WakaTime Config ---
-// TODO: WakaTime stats require a private API key and a proxy/serverless function
-// to avoid exposing it. For now, we'll just show placeholders.
-const WAKATIME_USER = "3f94bafd-99a7-42fc-8ef7-e16bab495046";
+// 3. ADDED: WakaTime URL from your function
+const WAKATIME_URL = 'https://wakatime.com/share/@ShashwathK/0942d213-cb36-417f-8482-4b108e70ac85.json';
 
 // --- Socials Config ---
+// 4. CHANGED: Updated Twitter to X
 const socials = [
-  { name: "GitHub", link: "https://github.com/Shashwath-K", icon: "si-github", class: "social__btn--github" },
-  { name: "LinkedIn", link: "#", icon: "si-linkedin", class: "social__btn--linkedin" },
-  { name: "Twitter", link: "#", icon: "si-twitter", class: "social__btn--twitter" },
-  { name: "Instagram", link: "#", icon: "si-instagram", class: "social__btn--instagram" },
-  { name: "Spotify", link: "#", icon: "si-spotify", class: "social__btn--spotify" },
-  { name: "YouTube", link: "#", icon: "si-youtube", class: "social__btn--youtube" },
-  { name: "Facebook", link: "#", icon: "si-facebook", class: "social__btn--facebook" },
-  { name: "Discord", link: "#", icon: "si-discord", class: "social__btn--discord" },
+  { name: "GitHub", link: "https://github.com/Shashwath-K", icon: <SiGithub />, class: "social__btn--github" },
+  { name: "LinkedIn", link: "#", icon: <SiLinkedin />, class: "social__btn--linkedin" },
+  { name: "X", link: "#", icon: <SiX />, class: "social__btn--x" }, // CHANGED
+  { name: "Instagram", link: "#", icon: <SiInstagram />, class: "social__btn--instagram" },
+  { name: "Spotify", link: "#", icon: <SiSpotify />, class: "social__btn--spotify" },
+  { name: "YouTube", link: "#", icon: <SiYoutube />, class: "social__btn--youtube" },
+  { name: "Facebook", link: "#", icon: <SiFacebook />, class: "social__btn--facebook" },
+  { name: "Discord", link: "#", icon: <SiDiscord />, class: "social__btn--discord" },
 ];
 
 // --- GitHub Stats Initial State ---
 const initialGitHubStats = {
-  avatarUrl: "https://avatars.githubusercontent.com/u/79392783?v=4", // Default avatar
+  avatarUrl: "https://avatars.githubusercontent.com/u/79392783?v=4",
   login: GITHUB_USERNAME,
   profileUrl: `https://github.com/${GITHUB_USERNAME}`,
   rate: "...",
@@ -41,7 +46,7 @@ const initialGitHubStats = {
   prs: "...",
 };
 
-// --- WakaTime Stats Initial State ---
+// 5. ADDED: WakaTime Stats Initial State
 const initialWakaStats = {
   dailyHours: "...",
   totalHours: "...",
@@ -49,13 +54,15 @@ const initialWakaStats = {
 
 const DevStats = () => {
   const [githubStats, setGitHubStats] = useState(initialGitHubStats);
+  
+  // 6. ADDED: WakaTime state
   const [wakaStats, setWakaStats] = useState(initialWakaStats);
 
   // --- Fetch GitHub Data ---
   useEffect(() => {
     const fetchGitHubData = async () => {
       try {
-        // --- 1. Fetch Basic User Info ---
+        // (GitHub fetch logic remains the same)
         const userRes = await fetch(GITHUB_API_URL);
         if (!userRes.ok) throw new Error('Failed to fetch user');
         const userData = await userRes.json();
@@ -63,13 +70,11 @@ const DevStats = () => {
         const rateLimitRemaining = userRes.headers.get('x-ratelimit-remaining');
         const rateLimitTotal = userRes.headers.get('x-ratelimit-limit');
 
-        // --- 2. Fetch Repos to count stars ---
         const reposRes = await fetch(GITHUB_REPOS_URL);
         if (!reposRes.ok) throw new Error('Failed to fetch repos');
         const reposData = await reposRes.json();
         const totalStars = reposData.reduce((acc, repo) => acc + repo.stargazers_count, 0);
 
-        // --- 3. Fetch Events to count recent PRs and Issues ---
         const eventsRes = await fetch(GITHUB_EVENTS_URL);
         if (!eventsRes.ok) throw new Error('Failed to fetch events');
         const eventsData = await eventsRes.json();
@@ -85,7 +90,6 @@ const DevStats = () => {
           .filter(event => event.type === 'IssuesEvent' && event.payload.action === 'opened' && new Date(event.created_at) > ninetyDaysAgo)
           .length;
 
-        // --- 4. Set All Stats ---
         setGitHubStats({
           avatarUrl: userData.avatar_url || initialGitHubStats.avatarUrl,
           login: userData.login,
@@ -101,7 +105,6 @@ const DevStats = () => {
 
       } catch (error) {
         console.error("Error fetching GitHub stats:", error);
-        // Keep partial or default data
         setGitHubStats(prev => ({ ...prev, rate: "Error" }));
       }
     };
@@ -109,26 +112,49 @@ const DevStats = () => {
     fetchGitHubData();
   }, []); // Empty dependency array means this runs once on mount
 
-  // --- Fetch WakaTime Data ---
+  // 7. ADDED: Your WakaTime logic, adapted for React state
   useEffect(() => {
-    const fetchWakaTimeData = async () => {
-      // TODO: Implement WakaTime fetching.
-      // This usually requires a serverless function (on Vercel or Netlify)
-      // to proxy your request and securely add your WAKA_API_KEY.
-      //
-      // Example for a serverless function:
-      // 1. Create `/api/wakatime.js`
-      // 2. Fetch `/api/wakatime` from this component.
-      // 3. Your serverless function fetches `https.../wakatime.com/api/v1/users/current/stats/last_7_days?api_key=YOUR_SECRET`
-      // 4. It then returns the JSON to this component.
-      //
-      // For now, we'll just log a message.
-      console.log("WakaTime fetching is not implemented. Set up a serverless proxy.");
-      // setWakaStats({ ... });
-    };
+    async function fetchWakaStats() {
+      try {
+        const response = await fetch(WAKATIME_URL);
+        const stats = await response.json();
+        const dailyData = stats.data;
 
-    fetchWakaTimeData();
-  }, []);
+        let dailyHoursText = '0.0';
+        let totalHoursText = '0.0';
+
+        if (Array.isArray(dailyData) && dailyData.length > 0) {
+          const mostRecentDay = dailyData[dailyData.length - 1];
+          const recentSeconds = mostRecentDay.grand_total?.total_seconds;
+
+          dailyHoursText = typeof recentSeconds === 'number'
+            ? (recentSeconds / 3600).toFixed(1)
+            : '0.0';
+
+          const totalSeconds = dailyData.reduce((sum, day) => {
+            return sum + (day.grand_total?.total_seconds || 0);
+          }, 0);
+
+          totalHoursText = (totalSeconds / 3600).toFixed(1);
+        }
+        
+        setWakaStats({
+          dailyHours: dailyHoursText,
+          totalHours: totalHoursText
+        });
+
+      } catch (error) {
+        console.error('WakaTime fetch failed:', error);
+        setWakaStats({
+          dailyHours: 'N/A',
+          totalHours: 'N/A'
+        });
+      }
+    }
+
+    fetchWakaStats();
+  }, []); // Empty dependency array means this runs once on mount
+
 
   return (
     <section 
@@ -141,24 +167,14 @@ const DevStats = () => {
       <div className="dev-stats__grid">
         {/* Main GitHub Card */}
         <div className="dev-card dev-card--github">
+          {/* (GitHub JSX remains the same) */}
           <div className="card-content">
             <div className="card-header">
               <div className="card-header__user">
-                <img 
-                  id="gh-avatar" 
-                  src={githubStats.avatarUrl} 
-                  alt="GitHub avatar" 
-                  className="card-header__avatar" 
-                />
+                <img id="gh-avatar" src={githubStats.avatarUrl} alt="GitHub avatar" className="card-header__avatar" />
                 <div className="card-header__info">
                   <div id="gh-login" className="card-header__title">{githubStats.login}</div>
-                  <a 
-                    id="gh-profile" 
-                    href={githubStats.profileUrl} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="card-header__link"
-                  >
+                  <a id="gh-profile" href={githubStats.profileUrl} target="_blank" rel="noopener noreferrer" className="card-header__link">
                     View GitHub profile
                   </a>
                 </div>
@@ -168,22 +184,15 @@ const DevStats = () => {
                 <div>Repos: <span id="gh-repos-small">{githubStats.repos}</span></div>
               </div>
             </div>
-
             <div className="contrib-grid-wrapper">
-              <img 
-                src={`https://ghchart.rshah.org/${GITHUB_USERNAME}`} 
-                alt="GitHub contribution graph" 
-                className="contrib-img" 
-                onError={(e) => e.currentTarget.replaceWith('N/A')} 
-              />
+              <img src={`https://ghchart.rshah.org/${GITHUB_USERNAME}`} alt="GitHub contribution graph" className="contrib-img" onError={(e) => e.currentTarget.replaceWith('N/A')} />
             </div>
-
             <div className="metrics__grid">
               <div className="metric"><div className="metric__label">Followers</div><div className="metric__value" id="gh-followers">{githubStats.followers}</div></div>
               <div className="metric"><div className="metric__label">Following</div><div className="metric__value" id="gh-following">{githubStats.following}</div></div>
               <div className="metric"><div className="metric__label">Stars</div><div className="metric__value" id="gh-stars">{githubStats.stars}</div></div>
               <div className="metric"><div className="metric__label">Open Issues</div><div className="metric__value" id="gh-issues">{githubStats.issues}</div></div>
-              <div className="metric"><div className="metric__label">Recent PRs</div><div className="metric__value" id="gh-prs">{githubStats.prs}</div></div>
+              <div className="metric"><div className="metric__label">Recent PRs</div><div className="metric__value"id="gh-prs">{githubStats.prs}</div></div>
               <div className="metric"><div className="metric__label">Public Repos</div><div className="metric__value" id="gh-repos">{githubStats.repos}</div></div>
             </div>
           </div>
@@ -207,10 +216,12 @@ const DevStats = () => {
               <div className="metrics__grid wakatime-metrics">
                 <div className="metric">
                   <div className="metric__label">Daily Coding Hours</div>
+                  {/* 8. CHANGED: Now reads from React state */}
                   <div className="metric__value" id="waka-daily-hours">{wakaStats.dailyHours}</div>
                 </div>
                 <div className="metric">
                   <div className="metric__label">Total Hours (Period)</div>
+                  {/* 9. CHANGED: Now reads from React state */}
                   <div className="metric__value" id="waka-total-hours">{wakaStats.totalHours}</div>
                 </div>
               </div>
@@ -233,7 +244,8 @@ const DevStats = () => {
                     rel="noopener noreferrer" 
                     title={social.name}
                   >
-                    <i className={`si ${social.icon}`}></i>
+                    {/* This correctly renders the icon component */}
+                    {social.icon}
                   </a>
                 ))}
               </div>
@@ -246,4 +258,3 @@ const DevStats = () => {
 };
 
 export default DevStats;
-
