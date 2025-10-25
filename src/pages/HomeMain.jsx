@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet';
 import FloatingIsland from '../components/FloatingIsland'; // ADD THIS
 import Footer from '../components/Footer';
 import Hero from './home/Hero';
-import Notes from './home/Notes';
 import WhatIDo from './home/WhatIDo';
 // Lazy load heavy components for performance
 const Stacks = lazy(() => import('./home/Stacks'));
@@ -70,9 +69,6 @@ const HomeMain = () => {
             <DevStats />
           </section>
         </Suspense>
-        <section id="notes" aria-labelledby="notes-title">
-          <Notes />
-        </section>
       </main>
       <Footer darkMode={darkMode} />
       {showTopBtn && (

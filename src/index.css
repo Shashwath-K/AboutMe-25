@@ -2,35 +2,59 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 :root {
-  /* Set Montserrat as the default font (Tailwind base styles will respect this) */
-  font-family: 'Montserrat', system-ui;
-  line-height: 1.5;
-  font-weight: 400;
-
-  /* Keep font rendering rules */
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color-scheme: light dark;
+font-family: 'Montserrat', system-ui;line-height: 1.5; font-weight: 400;
+font-synthesis: none; text-rendering: optimizeLegibility;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+color-scheme: light dark;
 }
 
-/* * 2. Apply Base Theme: 
- * Using the custom utility from the complex config 
- * to set the global green text and black background theme.
- */
-.theme-config-green-black {
-    /* Sets CSS variables and applies the theme colors */
-}
-
-/* * 3. Preserve essential resets/wrappers 
- * Tailwind's base will provide many resets, but preserving these is fine.
- */
 body {
-  margin: 0;
+margin: 0;
 }
 
 #root {
-  width: 100%;
+ width: 100%;
+}
+@layer components {
+  
+  /* * This is your main content wrapper.
+   * It's centered, has a max-width for desktops,
+   * and handles the mobile padding you requested.
+   */
+  .site-container {
+    @apply w-full max-w-7xl mx-auto; /* 1280px max-width, centered */
+    
+    /* * MOBILE PADDING:
+     * 'px-4' = 1rem (16px) of left/right padding on mobile.
+     */
+    @apply px-4;
+
+    /* * Responsive padding for tablets and up
+     * 'md:px-8' = 2rem (32px) of left/right padding on screens 768px and wider.
+     */
+    @apply md:px-8;
+  }
+
+  /* * This provides consistent top/bottom padding 
+   * for all your main sections.
+   */
+  .section {
+    /* 6rem (96px) top/bottom padding by default */
+    @apply py-24; 
+    
+    /* 8rem (128px) top/bottom padding on medium screens and up */
+    @apply md:py-32;
+  }
+
+  /* * This is the title style you used in
+   * WhatIDo.jsx and Stacks.jsx
+   */
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-center mb-12;
+    color: #E2E8F0; /* Assuming this is your desired title color */
+    text-shadow: 0 0 10px rgba(226, 232, 240, 0.3);
+  }
 }

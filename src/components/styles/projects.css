@@ -1,0 +1,450 @@
+/* ========================================================================
+   styles/projects/projects.css (Enhanced with Advanced Animations)
+   ======================================================================== */
+
+/* =========================
+   KEYFRAME ANIMATIONS (Overhauled)
+   ========================= */
+@keyframes animated-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* MODIFIED: Added rotateX for a more dynamic entry */
+@keyframes fadeUpStaggered {
+  from {
+    opacity: 0;
+    transform: translateY(100px) rotateX(-20deg) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+  }
+}
+
+/* NEW: Used for the image shimmer effect */
+@keyframes subtleShine {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+/* MODIFIED: More pronounced pulse on hover */
+@keyframes pillPulse {
+  0%, 100% {
+    box-shadow: 0 0 12px 2px rgba(34, 197, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 20px 6px rgba(163, 230, 53, 0.6);
+  }
+}
+
+@keyframes linkBorderMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* MODIFIED: Made float more subtle and slower */
+@keyframes orbFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+/* NEW: Simple fade-up for static heading elements */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================
+   FEATURED HEADING (Animated)
+   ========================= */
+.featured-heading {
+  background: var(--bg-900);
+  padding: 5rem 5%; /* Increased padding */
+  text-align: center;
+  border-top: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  overflow: hidden; /* Contain animations */
+}
+
+.featured-heading h2 {
+  font-size: clamp(2rem, 5vw, 2.8rem); /* Increased size */
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #22c55e, #a3e635, #22c55e);
+  background-size: 200% auto; /* For animated-gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* ADDED: Animations */
+  animation: 
+    animated-gradient 6s ease-in-out infinite,
+    fadeUp 1s var(--ease-smooth) forwards;
+}
+
+.featured-heading p {
+  font-size: clamp(1rem, 2.5vw, 1.15rem); /* Increased size */
+  color: var(--muted-2);
+  max-width: 800px; /* Increased max-width */
+  margin: 0 auto;
+  line-height: 1.7;
+  /* ADDED: Animations */
+  animation: 
+    fadeUp 1s var(--ease-smooth) forwards;
+  animation-delay: 0.2s;
+  opacity: 0; /* Start hidden for animation */
+}
+
+/* =========================
+   PROJECTS SECTION & CARDS (Complex Parallax)
+   ========================= */
+.projects-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4.5rem; /* Increased gap */
+  padding: 6rem clamp(4%, 12vw, 15%);
+  background: var(--bg-800);
+  position: relative;
+  /* Enabled for 3D transforms on children */
+  perspective: 2000px; 
+}
+
+.project-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: calc(var(--radius-lg) + 16px); /* Slightly larger radius */
+  background: var(--card);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05),
+    0 15px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(14px) saturate(150%);
+  /* CRITICAL: Enables 3D parallax for children */
+  transform-style: preserve-3d;
+  transition:
+    transform 0.65s var(--ease-smooth),
+    box-shadow 0.65s var(--ease-smooth),
+    border-color 0.5s;
+  opacity: 0; /* Start hidden */
+  /* MODIFIED: Using new keyframe */
+  animation: fadeUpStaggered 1s var(--ease-smooth) forwards;
+  padding: clamp(2.5rem, 5vw, 3.5rem); /* Increased padding */
+  gap: clamp(2rem, 5vw, 3.5rem);
+  position: relative;
+  overflow: hidden;
+}
+
+/* NEW: True staggered animation delay */
+.project-card:nth-child(2) { animation-delay: 0.2s; }
+.project-card:nth-child(3) { animation-delay: 0.4s; }
+/* Add more as needed */
+
+/* ... (::before and ::after pseudo-elements remain the same, they're great) ... */
+.project-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.15),
+    rgba(163, 230, 53, 0.08)
+  );
+  opacity: 0;
+  transition: opacity 0.5s, background-position 1.2s;
+  background-size: 200% 200%;
+  z-index: 0;
+}
+.project-card:hover::before {
+  opacity: 1;
+  background-position: 100% 100%;
+}
+
+.project-card::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  padding: 2px;
+  background: linear-gradient(135deg, #22c55e, #a3e635, #22c55e);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.project-card:hover::after {
+  opacity: 1;
+}
+/* -------------------------- */
+
+/* MODIFIED: Enhanced 3D hover state */
+.project-card:hover {
+  box-shadow: 0 40px 90px rgba(2, 6, 23, 0.7),
+    0 0 30px rgba(34, 197, 94, 0.2);
+  /* More dramatic tilt, less translation */
+  transform: rotateX(6deg) rotateY(-5deg) scale(1.05);
+  border-color: rgba(34, 197, 94, 0.5);
+}
+
+.project-image-wrapper {
+  flex: 1;
+  order: 2;
+  position: relative;
+  border-radius: calc(var(--radius-md) + 6px);
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    rgba(34, 197, 94, 0.05),
+    rgba(163, 230, 53, 0.02)
+  );
+  padding: 4px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.5);
+  
+  /* ADDED: 3D Parallax & Ambient Float */
+  transform-style: preserve-3d;
+  transition: transform 0.65s var(--ease-smooth);
+  animation: orbFloat 12s ease-in-out infinite 1s;
+}
+
+/* NEW: Shimmer effect on image */
+.project-image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07),
+    transparent
+  );
+  animation: subtleShine 7s ease-in-out infinite;
+  animation-delay: 2s;
+  opacity: 0;
+}
+/* Show shimmer on hover */
+.project-card:hover .project-image-wrapper::after {
+  opacity: 1;
+  animation-delay: 0s;
+}
+
+/* ADDED: 3D Parallax on hover (recedes) */
+.project-card:hover .project-image-wrapper {
+  transform: translateZ(-60px);
+}
+
+.project-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  filter: grayscale(15%) contrast(1.1) brightness(0.95);
+  transform: scale(1.03);
+  /* MODIFIED: Slower, smoother transform */
+  transition: transform 1s var(--ease-smooth), filter 0.5s;
+}
+
+/* MODIFIED: Image "zooms" to counter the wrapper's "recede" */
+.project-card:hover .project-image-wrapper img {
+  filter: grayscale(0%) contrast(1) brightness(1);
+  transform: scale(1.1) translateY(-6px);
+}
+
+.project-content {
+  flex: 1.4;
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  position: relative;
+}
+
+/* ADDED: Transition for parallax */
+.project-content h2,
+.project-content .description,
+.tech-stack,
+.project-links {
+  transition: transform 0.65s var(--ease-smooth);
+}
+
+/* ADDED: 3D Parallax on hover (comes forward) */
+.project-card:hover .project-content h2 {
+  transform: translateZ(50px);
+}
+.project-card:hover .project-content .description {
+  transform: translateZ(30px);
+}
+.project-card:hover .tech-stack {
+  transform: translateZ(20px);
+}
+.project-card:hover .project-links {
+  transform: translateZ(10px);
+}
+
+.project-content h2 {
+  font-size: clamp(1.6rem, 3.2vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+  background: linear-gradient(90deg, #22c55e, #a3e635);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.project-content .description {
+  margin-bottom: 1.6rem;
+  font-size: var(--text-lg);
+  line-height: 1.75;
+  color: var(--muted);
+  flex-grow: 1;
+  max-width: 95%;
+}
+
+/* =========================
+   TECH STACK PILLS (Animated)
+   ========================= */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  transition:
+    background 0.3s,
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+
+/* MODIFIED: Swapped static color for the pulse animation */
+.pill:hover {
+  background: rgba(34, 197, 94, 0.2);
+  color: #fff;
+  transform: translateY(-3px) scale(1.05);
+  /* Uses the new, more pronounced pulse */
+  animation: pillPulse 1.5s ease-in-out infinite;
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+/* =========================
+   PROJECT LINKS (Animated)
+   ========================= */
+.project-links {
+  display: flex;
+  gap: 1.4rem;
+}
+
+.icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-2);
+  border: 1px solid transparent;
+  transition: all var(--fast) var(--ease-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ... (::before pseudo-element remains the same) ... */
+.icon-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(120deg, #22c55e, #a3e635, #22c55e);
+  background-size: 200% auto;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+/* MODIFIED: Added box-shadow for more pop */
+.icon-link:hover {
+  transform: translateY(-2px) scale(1.05);
+  color: #fff;
+  border-color: #22c55e;
+  background: linear-gradient(110deg, #10b981 40%, #22c55e 60%);
+  animation: linkBorderMove 2s linear infinite;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+}
+
+/* =========================
+   RESPONSIVENESS (Unchanged)
+   ========================= */
+@media (max-width: 992px) {
+  .project-card {
+    flex-direction: column;
+  }
+  .project-content {
+    order: 2;
+  }
+  .project-image-wrapper {
+    order: 1;
+    height: 260px;
+    /* Disable float on mobile for performance/layout */
+    animation: none;
+  }
+  /* Disable parallax on mobile */
+  .project-card:hover {
+    transform: translateY(-8px) scale(1.02);
+  }
+  .project-card:hover .project-content h2,
+  .project-card:hover .project-content .description,
+  .project-card:hover .tech-stack,
+  .project-card:hover .project-links,
+  .project-card:hover .project-image-wrapper {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .projects-section {
+    padding: 4rem 5%;
+  }
+  .project-content h2 {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .projects-section {
+    padding: 3rem 1rem;
+  }
+  .project-links {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .pill {
+    font-size: 0.8rem;
+  }
+  .icon-link {
+    font-size: 0.85rem;
+    padding: 0.5rem 0.9rem;
+  }
+}

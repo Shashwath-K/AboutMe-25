@@ -1,7 +1,7 @@
 // src/components/FloatingIsland.jsx
 
 import React, { useState, useEffect } from 'react';
-import { FaHome, FaUser, FaCode, FaChartBar, FaFileAlt, FaSun, FaMoon } from 'react-icons/fa';
+import { FaHome, FaUser, FaCode, FaChartBar, FaSun, FaMoon } from 'react-icons/fa';
 import './FloatingIsland.css'; // We will create this CSS file next
 
 // Define the sections to navigate to.
@@ -11,7 +11,6 @@ const sections = [
   { id: 'what-i-do', label: 'About', icon: <FaUser /> },
   { id: 'skills', label: 'Skills', icon: <FaCode /> },
   { id: 'stats', label: 'Stats', icon: <FaChartBar /> },
-  { id: 'notes', label: 'Notes', icon: <FaFileAlt /> },
 ];
 
 const FloatingIsland = ({ darkMode, toggleDarkMode }) => {
