@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import HomeMain from './pages/HomeMain';
 import ProjectsMain from './pages/ProjectsMain';
 import About from './pages/AboutMain';
+import './index.css';
+import ContactsMain from './pages/ContactsMain';
+
 const LayoutWrapper = ({ children }) => {
   return (
     <main>
@@ -20,6 +23,8 @@ const App = () => {
             <Route path="/" element={<HomeMain />} />
             <Route path="/projects" element={<ProjectsMain />} />
             <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<ContactsMain />} />
+
           </Routes>
         </LayoutWrapper>
       </Router>
