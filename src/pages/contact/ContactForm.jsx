@@ -1,5 +1,45 @@
 import React, { useState } from 'react';
 
+/**
+ * A reusable, styled form input component.
+ * It can render an <input> or <textarea> based on the 'type' prop.
+ */
+const FormInput = ({
+  label,
+  name,
+  type = 'text',
+  placeholder,
+  value,
+  onChange,
+  required = false,
+}) => {
+  // Use the 'input' class for both <input> and <textarea>
+  // Your CSS file styles them based on the tag.
+  const inputProps = {
+    id: name,
+    name: name,
+    placeholder: placeholder,
+    className: 'input',
+    value: value,
+    onChange: onChange,
+    required: required,
+  };
+
+  return (
+    <div className="input-group">
+      <label htmlFor={name}>{label}</label>
+      {type === 'textarea' ? (
+        <textarea {...inputProps} rows="6"></textarea>
+      ) : (
+        <input {...inputProps} type={type} />
+      )}
+    </div>
+  );
+};
+
+/**
+ * The main Contact Form component.
+ */
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -7,7 +47,7 @@ const ContactForm = () => {
     subject: '',
     message: '',
   });
-  const [status, setStatus] = useState('');
+  const [status, setStatus] =useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -51,60 +91,70 @@ const ContactForm = () => {
       
       // Restore form state
       setIsSubmitting(false);
-      setStatus('Your email client should open. If not, please email shashwathkukkunoor@outlook.com directly.');
+      setStatus('Your email client should open. If not, please email me directly.');
       setFormData({ name: '', email: '', subject: '', message: '' }); // Clear form
     }, 600);
   };
 
   return (
     <div className="contact-left" role="form" aria-labelledby="contact-form-heading">
-      <div className="glass p-6 rounded-xl shadow-xl contact-form-card">
-        <h2 id="contact-form-heading" className="text-2xl font-bold mb-4">Send a message</h2>
-        <p className="text-sm text-gray-400 mb-4">Fill out this form and your email client will open with the message pre-filled. Validation runs locally first.</p>
+      {/* This div now uses the .card class from your complex CSS file.
+        All utility classes like .glass, .p-6, .rounded-xl are removed.
+      */}
+      <div className="card contact-form-card">
+        <h2 id="contact-form-heading">Send a message</h2>
+        <p className="text-muted" style={{ transform: 'translateZ(20px)' }}>
+          Fill out this form and your email client will open with the message pre-filled.
+        </p>
 
-        <form id="contact-form" className="space-y-4" aria-label="Contact form" noValidate onSubmit={handleSubmit}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <label className="col-span-1">
-              <span className="small text-muted">Name</span>
-              <input
-                id="name" name="name" type="text" required
-                placeholder="Your name" className="input mt-1"
-                value={formData.name} onChange={handleChange}
-              />
-            </label>
-            <label className="col-span-1">
-              <span className="small text-muted">Email</span>
-              <input
-                id="email" name="email" type="email" required
-                placeholder="name@email.com" className="input mt-1"
-                value={formData.email} onChange={handleChange}
-              />
-            </label>
-          </div>
+        {/* The form no longer needs .space-y-4, as the .card gap handles it.
+          All inputs are replaced with the new FormInput component.
+        */}
+        <form id="contact-form" noValidate onSubmit={handleSubmit} style={{ display: 'contents' }}>
+          
+          <FormInput
+            label="Name"
+            name="name"
+            placeholder="Your name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
 
-          <label>
-            <span className="small text-muted">Subject</span>
-            <input
-              id="subject" name="subject" type="text"
-              placeholder="Quick note about the topic" className="input mt-1"
-              value={formData.subject} onChange={handleChange}
-            />
-          </label>
+          <FormInput
+            label="Email"
+            name="email"
+            type="email"
+            placeholder="name@email.com"
+            value={formData.email}
+            onChange={handleChange}
+            required
+          />
 
-          <label>
-            <span className="small text-muted">Message</span>
-            <textarea
-              id="message" name="message" rows="6" required
-              placeholder="Write your message..." className="input mt-1"
-              value={formData.message} onChange={handleChange}
-            ></textarea>
-          </label>
+          <FormInput
+            label="Subject"
+            name="subject"
+            placeholder="Quick note about the topic"
+            value={formData.subject}
+            onChange={handleChange}
+          />
 
+          <FormInput
+            label="Message"
+            name="message"
+            type="textarea"
+            placeholder="Write your message..."
+            value={formData.message}
+            onChange={handleChange}
+            required
+          />
+
+          {/* This markup matches the .form-actions in your complex CSS */}
           <div className="form-actions">
             <button id="submit-btn" type="submit" className="button" disabled={isSubmitting}>
               {isSubmitting ? 'Preparing...' : 'Send message'}
             </button>
-            <div id="form-status" role="status" aria-live="polite" className="text-sm text-muted">
+            <div id="form-status" role="status" aria-live="polite">
               {status}
             </div>
           </div>

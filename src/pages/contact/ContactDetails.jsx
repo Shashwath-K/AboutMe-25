@@ -1,46 +1,119 @@
 import React from 'react';
+import { SiGithub, SiLinkedin, SiX, SiInstagram } from 'react-icons/si';
 
-// Data for social badges
-const socialLinks = [
-  { name: 'GitHub', icon: 'devicon-github-original', label: 'GitHub' },
-  { name: 'LinkedIn', icon: 'devicon-linkedin-plain', label: 'LinkedIn' },
-  { name: 'Twitter', icon: 'devicon-twitter-original', label: 'X / Twitter' },
-  { name: 'Instagram', icon: 'devicon-instagram-plain', label: 'Instagram' },
+// --- Data for Contact Info ---
+// Making this data-driven for easier updates
+const contactInfo = [
+  {
+    title: 'Email',
+    content: 'shashwathkukkunoor@outlook.com',
+  },
+  {
+    title: 'Location',
+    content: 'Bengaluru, India',
+  },
+  {
+    title: 'Availability',
+    content: 'Open for internships, freelance & collaboration. Response within ~48 hours.',
+  },
 ];
 
+// --- Data for Social Badges ---
+// Updated with React Icons and hrefs
+const socialLinks = [
+  {
+    name: 'GitHub',
+    label: 'GitHub',
+    icon: <SiGithub />,
+    href: 'https://github.com/Shashwath-K', // Added link
+  },
+  {
+    name: 'LinkedIn',
+    label: 'LinkedIn',
+    icon: <SiLinkedin />,
+    href: '#', // Add your link
+  },
+  {
+    name: 'X',
+    label: 'X / Twitter',
+    icon: <SiX />, // Changed from Twitter
+    href: '#', // Add your link
+  },
+  {
+    name: 'Instagram',
+    label: 'Instagram',
+    icon: <SiInstagram />,
+    href: '#', // Add your link
+  },
+];
+
+/**
+ * A small component for a single contact detail item.
+ */
+const ContactInfoItem = ({ title, content }) => (
+  <div>
+    <dt className="kicker">{title}</dt>
+    <dd className="mt-1"><span className="text-muted">{content}</span></dd>
+  </div>
+);
+
+/**
+ * A small component for a single social media badge/link.
+ * This is now a functional <a> tag.
+ */
+const SocialBadge = ({ name, label, icon, href }) => (
+  <a
+    href={href}
+    className="badge" // This class is styled by your complex contact.css
+    aria-label={name}
+    target="_blank"
+    rel="noopener noreferrer"
+    role="listitem"
+  >
+    {icon}
+    <span className="small">{label}</span>
+  </a>
+);
+
+/**
+ * The main ContactDetails component.
+ */
 const ContactDetails = () => {
   return (
     <aside className="contact-right" aria-labelledby="contact-details-title">
-      <div className="glass p-6 rounded-xl shadow-xl contact-info-card">
-        <h3 id="contact-details-title" className="text-xl font-semibold mb-3">Contact details</h3>
+      
+      {/* Contact Info Card */}
+      {/* Removed .glass, .p-6, etc. to use the .card style from your complex CSS */}
+      <div className="card contact-info-card">
+        <h3 id="contact-details-title">Contact details</h3>
         <dl className="text-sm text-gray-300 space-y-3">
-          <div>
-            <dt className="kicker">Email</dt>
-            <dd className="mt-1"><span className="text-muted">shashwathkukkunoor@outlook.com</span></dd>
-          </div>
-          <div>
-            <dt className="kicker">Location</dt>
-            <dd className="mt-1"><span className="text-muted">Bengaluru, India</span></dd>
-          </div>
-          <div>
-            <dt className="kicker">Availability</dt>
-            <dd className="mt-1"><span className="text-muted">Open for internships, freelance & collaboration, response within ~48 hours.</span></dd>
-          </div>
+          {contactInfo.map((item) => (
+            <ContactInfoItem
+              key={item.title}
+              title={item.title}
+              content={item.content}
+            />
+          ))}
         </dl>
       </div>
 
-      <div className="glass p-6 rounded-xl shadow-xl social-card">
-        <h3 className="text-xl font-semibold mb-3">Find me on</h3>
-        <div className="social-badges flex flex-wrap gap-3 mb-4" role="list">
+      {/* Socials Card */}
+      <div className="card social-card">
+        <h3>Find me on</h3>
+        <div className="social-badges" role="list">
           {socialLinks.map((social) => (
-            <div key={social.name} className="badge" role="listitem" aria-label={social.name}>
-              <i className={social.icon}></i>
-              <span className="ml-2 small">{social.label}</span>
-            </div>
+            <SocialBadge
+              key={social.name}
+              name={social.name}
+              label={social.label}
+              icon={social.icon}
+              href={social.href}
+            />
           ))}
         </div>
         <p className="text-sm text-muted mt-2">
-          Prefer not to use the form? You can also email me directly at <strong>shashwathkukkunoor@outlook.com</strong>.
+          Prefer not to use the form? You can also email me directly at{' '}
+          <strong>shashwathkukkunoor@outlook.com</strong>.
         </p>
       </div>
     </aside>
