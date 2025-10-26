@@ -1,15 +1,15 @@
 /* ========================================================================
 
-
    styles/styles.css (Core Global Styles + Enhancements)
 
-
    ======================================================================== */
+
 
 /* =========================
    VARIABLES / THEME & DARK MODE
    ========================= */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
 
 /* Default (dark) theme */
 :root {
@@ -43,6 +43,7 @@
   --slow: 680ms;
 }
 
+
 /* Light mode variant */
 body.light,
 :root.light-theme {
@@ -54,6 +55,7 @@ body.light,
   --muted-2: #909090;
   --text: #111928;
 }
+
 
 /* Preference */
 @media (prefers-color-scheme: light) {
@@ -68,9 +70,11 @@ body.light,
   }
 }
 
+
 @media (prefers-reduced-motion: reduce) {
   :root { --fast: 1ms; --med: 1ms; --slow: 1ms; }
 }
+
 
 
 
@@ -96,24 +100,59 @@ a{color:inherit;text-decoration:none;transition:all var(--fast) var(--ease-smoot
 a:hover{opacity:.92;transform:translateY(-1px);}
 
 
-/* Fix container padding */
-body .container { padding-left: 2rem !important; padding-right: 2rem !important; }
+
+/* REMOVED: Fix container padding - this was causing the issue */
+/* REMOVED: body .container { padding-left: 2rem !important; padding-right: 2rem !important; } */
+
+/* Updated container - responsive padding for mobile/tablet only */
 .container {
   max-width: 1200px;
   width: 100%;
   margin-left: auto;
   margin-right: auto;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
   display: block;
 }
-/* Namespace your container */
+
+/* Tablet padding */
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Desktop - remove horizontal padding */
+@media (min-width: 1024px) {
+  .container {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* Updated site-container - responsive padding for mobile/tablet only */
 .site-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   width: 100%;
 }
+
+/* Tablet padding */
+@media (min-width: 768px) {
+  .site-container {
+    padding: 0 2rem;
+  }
+}
+
+/* Desktop - remove horizontal padding */
+@media (min-width: 1024px) {
+  .site-container {
+    padding: 0;
+  }
+}
+
 
 .section { padding: 4.5rem 0; }
 .h-center { display: flex; align-items: center; justify-content: center; }
@@ -133,9 +172,11 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
 .lead { font-size: var(--text-lg); color: var(--muted); font-family: var(--ff-sans); }
 
 
+
 /* =========================
    HEADER / NAV / TOGGLE
    ========================= */
+
 
 /* =========================
    BACK TO TOP BUTTON
@@ -160,6 +201,7 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
   opacity: 1;
   box-shadow: 0 12px 28px rgba(124,58,237,0.16);
 }
+
 
 
 /* =========================
@@ -191,6 +233,7 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
   backdrop-filter: blur(6px) saturate(140%);
   box-shadow: 0 20px 60px rgba(2,6,23,0.6);
 }
+
 
 
 /* =========================
@@ -235,6 +278,7 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
 }
 
 
+
 /* =========================
    GLOBAL COMPONENTS, BUTTONS
    ========================= */
@@ -244,11 +288,13 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
 .btn:focus {outline:2px solid var(--accent-2);}
 
 
+
 /* =========================
    FORMS / INPUTS
    ========================= */
 .input, textarea { width:100%; padding:.7rem .9rem; border-radius:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.06); color:var(--text); font-family:var(--ff-sans);}
 .input:focus, textarea:focus { outline:none; box-shadow:0 6px 20px rgba(12,10,30,0.45); border-color:rgba(124,58,237,0.7); }
+
 
 
 /* =========================
@@ -262,10 +308,12 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
 @keyframes wiggleAnim{0%{transform:rotate(0)}25%{transform:rotate(-1deg)}50%{transform:rotate(0)}75%{transform:rotate(1deg)}100%{transform:rotate(0)}}
 
 
+
 /* Marquee */
 .animate-marquee{display:flex;animation:marquee 28s linear infinite;gap:2rem;align-items:center;font-family:var(--ff-sans);}
 .animate-marquee:hover{animation-play-state:paused;}
 @keyframes marquee{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
 
 
 /* Helpers */
@@ -283,9 +331,11 @@ h3 { font-size: 1.05rem; margin: 0 0 .4rem; font-family: var(--ff-sans); }
 .visually-hidden {position:absolute!important;clip:rect(1px,1px,1px,1px)!important;}
 
 
+
 @media (prefers-reduced-motion: reduce){
   *,*:before,*:after{animation-duration:1ms!important;animation-iteration-count:1!important;transition-duration:1ms!important;scroll-behavior:auto!important;}
 }
+
 
 @media print{
   body{background:white;color:black;font-family:"Montserrat";}

@@ -1,9 +1,6 @@
-// HomeMain.jsx
-
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { Helmet } from 'react-helmet';
-// import Header from '../components/Header'; // REMOVE THIS
-import FloatingIsland from '../components/FloatingIsland'; // ADD THIS
+import FloatingIsland from '../components/FloatingIsland';
 import Footer from '../components/Footer';
 import Hero from './home/Hero';
 import WhatIDo from './home/WhatIDo';
@@ -11,7 +8,6 @@ import WhatIDo from './home/WhatIDo';
 const Stacks = lazy(() => import('./home/Stacks'));
 const DevStats = lazy(() => import('./home/DevStats'));
 import '../components/styles/styles.css'; 
-import '../components/FloatingIsland.css'; // ADD THIS to import the CSS
 
 const HomeMain = () => {
   // Dark mode toggle state initialization
@@ -71,15 +67,6 @@ const HomeMain = () => {
         </Suspense>
       </main>
       <Footer darkMode={darkMode} />
-      {showTopBtn && (
-        <button
-          aria-label="Scroll back to top"
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="backToTopBtn" // Use direct classname
-        >
-          ↑ Top
-        </button>
-      )}
     </>
   );
 };
