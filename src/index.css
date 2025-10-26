@@ -21,3 +21,20 @@ margin: 0;
 #root {
  width: 100%;
 }
+@media (max-width: 900px) {
+  .section {
+    position: relative;
+    padding: 5rem 6%;
+    background: var(--section-bg, #10191B);
+  }
+  .section h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+    text-align: center;
+    background: linear-gradient(90deg, var(--matrix-green-1, #17dc52), var(--matrix-green-2, #16a34a));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
