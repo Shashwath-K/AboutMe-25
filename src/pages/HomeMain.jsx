@@ -1,6 +1,5 @@
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { Helmet } from 'react-helmet';
-import FloatingIsland from '../components/FloatingIsland';
 import Footer from '../components/Footer';
 import Hero from './home/Hero';
 import WhatIDo from './home/WhatIDo';
@@ -40,10 +39,6 @@ const HomeMain = () => {
       <Helmet>
         {/* ... (all your helmet content remains the same) ... */}
       </Helmet>
-      
-      {/* ADD THE FLOATING ISLAND HERE */}
-      <FloatingIsland darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
-
       <main
         id="main-content"
         className={darkMode ? 'dark' : 'light'}

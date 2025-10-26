@@ -1,46 +1,37 @@
 // src/components/FloatingIsland.jsx
 
-import React, { useState, useEffect } from 'react';
-import { FaHome, FaUser, FaCode, FaChartBar, FaSun, FaMoon } from 'react-icons/fa';
-import './FloatingIsland.css'; // We will create this CSS file next
+import React from 'react';
+// 1. IMPORT Link and useLocation
+import { Link, useLocation } from 'react-router-dom';
 
-// Define the sections to navigate to.
-// The 'id' must match the 'id' attribute of your <section> tags in HomeMain.jsx
-const sections = [
-  { id: 'home', label: 'Home', icon: <FaHome /> },
-  { id: 'what-i-do', label: 'About', icon: <FaUser /> },
-  { id: 'skills', label: 'Skills', icon: <FaCode /> },
-  { id: 'stats', label: 'Stats', icon: <FaChartBar /> },
+// 2. IMPORT new icons for your routes
+import { 
+  FaHome, 
+  FaUser, 
+  FaProjectDiagram,  // Changed from FaCode
+  FaImage,             // New icon
+  FaEnvelope,          // New icon
+  FaSun, 
+  FaMoon 
+} from 'react-icons/fa';
+import './FloatingIsland.css';
+
+// 3. DEFINE the new routes based on your list
+const routes = [
+  { path: '/', label: 'Home', icon: <FaHome /> },
+  { path: '/about', label: 'About', icon: <FaUser /> },
+  { path: '/projects', label: 'Projects', icon: <FaProjectDiagram /> },
+  { path: '/media', label: 'Media', icon: <FaImage /> },
+  { path: '/contact', label: 'Contact', icon: <FaEnvelope /> },
 ];
 
 const FloatingIsland = ({ darkMode, toggleDarkMode }) => {
-  const [activeSection, setActiveSection] = useState('home');
+  // 4. GET the current location
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-  useEffect(() => {
-    const handleScroll = () => {
-      let currentActive = 'home';
-      // Iterate from bottom to top
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const section = sections[i];
-        const element = document.getElementById(section.id);
-        
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // Check if the section is at or above the middle of the viewport
-          if (rect.top <= window.innerHeight / 2) {
-            currentActive = section.id;
-            break; // Found the topmost active section
-          }
-        }
-      }
-      setActiveSection(currentActive);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Run on mount to set initial state
-
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []); // Empty dependency array ensures this runs only on mount/unmount
+  // 5. REMOVED all useState and useEffect for scroll-spying.
+  // This component is now much simpler.
 
   return (
     <nav
@@ -50,28 +41,27 @@ const FloatingIsland = ({ darkMode, toggleDarkMode }) => {
     >
       {/* Navigation Links */}
       <ul>
-        {sections.map((section) => (
-          <li key={section.id}>
-            <a
-              href={`#${section.id}`}
-              className={activeSection === section.id ? 'active' : ''}
-              aria-label={`Scroll to ${section.label} section`}
-              // Smooth scroll behavior
-              onClick={(e) => {
-                e.preventDefault();
-                document.getElementById(section.id)?.scrollIntoView({
-                  behavior: 'smooth',
-                });
-              }}
+        {/* 6. MAP over routes instead of sections */}
+        {routes.map((route) => (
+          <li key={route.path}>
+            
+            {/* 7. USE <Link> instead of <a> */}
+            <Link
+              to={route.path}
+              // 8. CHECK active state against the current path
+              className={currentPath === route.path ? 'active' : ''}
+              aria-label={`Maps to ${route.label} page`}
+              // 9. REMOVED onClick for smooth scroll
             >
-              <span className="nav-icon">{section.icon}</span>
-              <span className="nav-tooltip">{section.label}</span>
-            </a>
+              <span className="nav-icon">{route.icon}</span>
+              <span className="nav-tooltip">{route.label}</span>
+            </Link>
+
           </li>
         ))}
       </ul>
 
-      {/* Dark Mode Toggle */}
+      {/* Dark Mode Toggle (This part is unchanged) */}
       <button
         onClick={toggleDarkMode}
         className="dark-mode-toggle"
