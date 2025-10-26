@@ -1,47 +1,55 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 /**
  * A wrapper component that animates its child element in on scroll.
- * It uses IntersectionObserver to replicate the original HTML's script.
+ * RE-IMAGINED: Uses React state to toggle CSS classes instead of direct style manipulation.
  */
 const RevealOnScroll = ({ children }) => {
+  const [isVisible, setIsVisible] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
-    // Set initial styles
-    element.style.opacity = '0';
-    element.style.transform = 'translateY(18px)';
-    element.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+    // REMOVED: All direct style manipulation (e.g., element.style.opacity)
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // When the element is in view, trigger the animation
+        // When the element is in view, update the state
         if (entry.isIntersecting) {
-          element.style.opacity = '1';
-          element.style.transform = 'translateY(0)';
+          setIsVisible(true); // 1. Set state to true
           // Stop observing once animated
           observer.unobserve(element);
         }
       },
       {
-        threshold: 0.12, // Same threshold as your script
+        threshold: 0.12, // Same threshold
       }
     );
 
     // Start observing the element
     observer.observe(element);
 
-    // Cleanup function to disconnect observer
+    // Cleanup function
     return () => observer.disconnect();
   }, []); // Empty dependency array ensures this runs once on mount
 
-  // We clone the single child element and attach the ref to it.
-  // This avoids adding an extra wrapper div that could break CSS.
+  // Clone the child element
   const child = React.Children.only(children);
-  return React.cloneElement(child, { ref });
+  
+  // 2. Add new CSS classes based on visibility state
+  const newClassName = [
+    child.props.className, // Keep existing classes
+    'reveal-on-scroll',    // Add the base animation class
+    isVisible ? 'is-visible' : '' // Add the 'is-visible' class on reveal
+  ].filter(Boolean).join(' ');
+
+  // 3. Return the cloned element with the new ref and classNames
+  return React.cloneElement(child, {
+    ref,
+    className: newClassName
+  });
 };
 
 export default RevealOnScroll;

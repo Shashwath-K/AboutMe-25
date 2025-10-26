@@ -6,7 +6,8 @@ const SkillCard = ({ name, icon }) => {
     // RevealOnScroll wraps the card and handles the animation
     <RevealOnScroll>
       <div className="skill-card">
-        <i className={icon} aria-hidden="true"></i>
+        {/* CHANGED: Render the icon component directly */}
+        {icon}
         <span>{name}</span>
       </div>
     </RevealOnScroll>
