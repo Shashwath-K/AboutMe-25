@@ -1,231 +1,528 @@
-/* ENHANCED CONTACT.CSS
-  - De-duplicated and merged all rules.
-  - Added transitions and hover/focus/active states for buttons and badges.
-  - Preserved original theme, colors, and font properties.
-*/
+/* ========================================================================
+   COMPLEX OVERHAUL: styles/contact.css
+   - THEME: "Smoking Glass" dark theme (green & black)
+   - 3D: Perspective grid with 3D card hover effects
+   - ANIMATIONS: Staggered loading, button shines, input shimmers,
+                 animated borders, and pulse glows.
+   - LAYOUT: Robust, responsive layout with global padding.
+   ======================================================================== */
 
-/* -----------------------------
- * MAIN LAYOUT & GRID
- * ----------------------------- */
+/* =========================
+   1. THEME VARIABLES
+   ========================= */
+:root {
+  /* Core Colors */
+  --bg-darkest: #0a0a0a;
+  --bg-dark: #101010;
+  --text-light: #e2e8f0;
+  --text-muted: #94a3b8;
+
+  /* Green Theme */
+  --green-light: #22c55e; /* green-500 */
+  --green-dark: #16a34a;  /* green-600 */
+  --glow-color: rgba(34, 197, 94, 0.2);
+  --glow-color-strong: rgba(34, 197, 94, 0.4);
+
+  /* Glass/Card Theme */
+  --card-bg: rgba(16, 16, 16, 0.6);
+  --card-bg-hover: rgba(16, 16, 16, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-border-hover: rgba(34, 197, 94, 0.5);
+  --input-bg: rgba(255, 255, 255, 0.03);
+
+  /* Animation */
+  --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-elastic: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================
+   2. KEYFRAME ANIMATIONS
+   ========================= */
+
+/* For staggering in the main columns */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* For the submit button's ambient pulse */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 20px var(--glow-color);
+  }
+  50% {
+    box-shadow: 0 0 35px var(--glow-color-strong);
+  }
+}
+
+/* For the input field's subtle shimmer */
+@keyframes subtleShimmer {
+  0% { background-position: 200% 50%; }
+  100% { background-position: -200% 50%; }
+}
+
+/* For the animated border on the cards */
+@keyframes animatedBorder {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* For the button's hover-glint */
+@keyframes shine {
+  from { transform: translateX(-100%) skewX(-15deg); }
+  to { transform: translateX(200%) skewX(-15deg); }
+}
+
+/* =========================
+   3. GLOBAL PAGE LAYOUT
+   ========================= */
+
+/* * This is the main section wrapper.
+ * We apply 3D perspective here for the child cards.
+ * We also add vertical padding.
+*/
+.contact-section {
+  position: relative;
+  width: 100%;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  overflow: hidden;
+  
+  /* Enables 3D transforms for child elements */
+  perspective: 2500px;
+}
+
+/* * This is the site-container you requested for left-right padding.
+ * It centers the content and controls responsive padding.
+*/
+.site-container {
+  width: 100%;
+  max-width: 1280px; /* Standard max-width (lg) */
+  margin-left: auto;
+  margin-right: auto;
+  
+  /* Mobile padding (left/right) */
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Tablet and up padding */
+@media (min-width: 768px) {
+  .site-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* =========================
+   4. COMPLEX GRID LAYOUT
+   ========================= */
 
 .contact-grid { 
   display: grid; 
-  grid-template-columns: 1fr; /* Mobile-first: 1 column */
-  gap: 2rem; 
-  align-items: stretch; /* Make columns equal height */
-  padding: 0 1rem; 
-  box-sizing: border-box; 
+  grid-template-columns: 1fr;
+  gap: 2.5rem; 
+  align-items: stretch; 
+  
+  /* --- ADD THIS CODE --- */
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  /* --- End of added code --- */
 }
 
-/* Ensure direct children of grid stretch to fill height */
-.contact-grid > * { 
-  align-self: stretch; 
-  height: 100%; 
-  box-sizing: border-box; 
+/* Desktop: 2-column grid */
+@media (min-width: 1024px) {
+  .contact-grid {
+    grid-template-columns: 1fr 400px; /* Form | Sidebar */
+  }
 }
 
-/* -----------------------------
- * LEFT COLUMN (FORM)
- * ----------------------------- */
+/* =========================
+   5. STAGGERED ANIMATIONS
+   ========================= */
 
-.contact-left .contact-form-card { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem; 
-  padding: 1.25rem; 
-  box-sizing: border-box; 
-  min-height: 0; /* Fix for flexbox in grid */
-  height: 100%; /* Ensure card fills the grid cell */
+.contact-left,
+.contact-right {
+  opacity: 0; /* Start hidden */
+  animation: fadeUp 1s var(--ease-smooth) forwards;
 }
 
-.contact-left h2 { 
-  margin: 0 0 .5rem; 
-  font-size: 1.25rem; 
-  font-weight: 700; /* Added weight for heading */
+.contact-right {
+  animation-delay: 0.2s; /* Staggered effect */
 }
 
-/* Push form actions (button, status) to the bottom */
-.form-actions { 
-  margin-top: auto; 
-  display: flex; 
-  gap: 0.75rem; 
-  align-items: center; 
-  padding-top: 0.5rem; /* Add some space above */
+/* =========================
+   6. COMPLEX CARD (Base Class)
+   ========================= */
+
+/* Base style for ALL 3 cards */
+.card {
+  position: relative;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border-radius: 1.5rem; /* 24px */
+  
+  /* The "Smoking Glass" effect */
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(14px) saturate(150%);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.05),
+              0 10px 30px rgba(0, 0, 0, 0.4);
+              
+  /* 3D & Animation properties */
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--ease-elastic),
+              box-shadow 0.6s var(--ease-elastic),
+              border-color 0.4s var(--ease-smooth),
+              background 0.4s var(--ease-smooth);
+  overflow: hidden; /* Important for pseudo-elements */
 }
 
-/* Keep button from shrinking */
-.form-actions .button { 
-  white-space: nowrap; 
+/* * COMPLEX: Animated border on hover
+ * Uses a masked, animated gradient.
+*/
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -2px; /* Sits just outside the card */
+  border-radius: inherit;
+  
+  /* The animated gradient */
+  background: linear-gradient(
+    135deg,
+    var(--green-light),
+    var(--green-dark),
+    var(--green-light)
+  );
+  background-size: 200% 200%;
+  
+  /* The mask magic */
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  
+  /* Animation */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-smooth);
+  animation: animatedBorder 4s linear infinite;
 }
 
-/* Form status message styling */
-#form-status { 
-  min-height: 1.1rem; 
-  color: var(--muted); /* Use theme variable */
-  display: block; 
-  font-size: 0.875rem; /* Slightly smaller */
+/* * COMPLEX: 3D hover effect (Desktop only)
+*/
+@media (min-width: 1024px) {
+  .card:hover {
+    border-color: var(--glass-border-hover);
+    background: var(--card-bg-hover);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6),
+                0 0 30px var(--glow-color);
+    transform: rotateX(6deg) rotateY(-5deg) scale(1.03) translateY(-10px);
+  }
+
+  .card:hover::after {
+    opacity: 1; /* Show animated border on hover */
+  }
 }
 
-/* -----------------------------
- * RIGHT COLUMN (INFO & SOCIALS)
- * ----------------------------- */
-
-.contact-right { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem; 
-  justify-content: space-between; /* Space out the two cards */
-  height: 100%; 
-  box-sizing: border-box; 
+/* Simpler hover for mobile */
+@media (max-width: 1023px) {
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border-color: var(--glass-border-hover);
+  }
 }
 
-.contact-right .contact-info-card, 
-.contact-right .social-card { 
-  display: flex; 
-  flex-direction: column; 
-  gap: 1rem; 
-  box-sizing: border-box; 
+/* =========================
+   7. CARD-SPECIFIC LAYOUTS
+   ========================= */
+
+/* Left column (Form) */
+.contact-form-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Fill the grid cell */
+  gap: 1.5rem;
 }
 
-.contact-right h3 { 
-  margin: 0 0 .5rem; 
-  font-size: 1.05rem; /* From original CSS */
-  font-weight: 600; /* Added weight for heading */
+/* Right column (Info & Socials) */
+.contact-right {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  height: 100%;
 }
 
-/* -----------------------------
- * REUSABLE COMPONENTS
- * ----------------------------- */
-
-/* Inputs & Textarea */
-.contact-left .input { 
-  width: 100%; 
-  height: 48px; 
-  padding: .6rem .8rem; 
-  border-radius: 10px; 
-  background: rgba(255,255,255,0.02); 
-  border: 1px solid rgba(255,255,255,0.06); 
-  color: var(--text); 
-  box-sizing: border-box; 
-  font-family: inherit; 
-  /* ENHANCEMENT: Added transition */
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+.contact-info-card,
+.social-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex-grow: 1; /* Make them share the space */
 }
 
-.contact-left textarea.input { 
-  min-height: 160px; 
-  height: auto; 
-  padding: .75rem .8rem; 
-  resize: vertical; 
+/* =========================
+   8. COMPLEX HEADINGS (3D)
+   ========================= */
+
+.card h2,
+.card h3 {
+  margin: 0;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  
+  /* Themed green gradient text */
+  background: linear-gradient(90deg, var(--green-light), #a3e635);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  
+  /* Subtle 3D pop-out */
+  transform: translateZ(30px);
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Submit Button */
-.contact-left .button { 
-  padding: .7rem 1.1rem; 
-  border-radius: 12px; 
-  font-weight: 700; /* From original CSS */
+.card h2 {
+  font-size: clamp(1.5rem, 4vw, 1.8rem); /* 28px */
+}
+.card h3 {
+  font-size: clamp(1.25rem, 3vw, 1.375rem); /* 22px */
+}
+
+/* =========================
+   9. COMPLEX FORM ELEMENTS
+   ========================= */
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.input-group label {
+  font-weight: 500;
+  color: var(--text-light);
+  padding-left: 0.25rem;
+  transform: translateZ(20px); /* 3D pop-out */
+}
+
+.input {
+  width: 100%;
+  height: 52px;
+  padding: 0 1rem;
+  border-radius: 0.75rem; /* 12px */
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-light);
+  font-family: inherit;
+  font-size: 1rem;
+  box-sizing: border-box;
+  
+  /* COMPLEX: Subtle shimmer animation */
+  background-image: linear-gradient(
+    90deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%
+  );
+  background-size: 200% 100%;
+  animation: subtleShimmer 8s linear infinite;
+  
+  transition: border-color 0.3s var(--ease-smooth),
+              box-shadow 0.3s var(--ease-smooth);
+}
+
+textarea.input {
+  min-height: 160px;
+  height: auto;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  resize: vertical;
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: none;
+  border-color: var(--green-light);
+  box-shadow: 0 0 25px var(--glow-color);
+}
+
+/* Push form actions to the bottom */
+.form-actions {
+  margin-top: auto; /* This is the key */
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 1rem;
+  padding-top: 0.5rem;
+}
+
+@media (min-width: 640px) {
+  .form-actions {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* Form status message */
+#form-status {
+  min-height: 1.1rem;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  transform: translateZ(10px); /* 3D pop-out */
+}
+
+/* =========================
+   10. COMPLEX BUTTON
+   ========================= */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1.5rem;
+  border: 0;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #000;
   cursor: pointer;
-  /* ENHANCEMENT: Added transition */
-  transition: filter 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+  white-space: nowrap;
+  
+  /* Themed gradient */
+  background: linear-gradient(110deg, var(--green-light) 40%, #a3e635 60%);
+  
+  /* Ambient pulse */
+  box-shadow: 0 5px 15px var(--glow-color);
+  animation: pulseGlow 3s infinite ease-in-out;
+  
+  transform: translateZ(10px); /* 3D pop-out */
+  transition: all 0.3s var(--ease-smooth);
+  overflow: hidden; /* For shine */
 }
 
-/* Social Badges */
-.social-badges .badge { 
-  display: inline-flex; 
-  align-items: center; 
-  gap: .5rem; 
-  padding: .45rem .7rem; 
-  border-radius: 10px; 
-  background: rgba(255,255,255,0.02); 
-  border: 1px solid rgba(255,255,255,0.04); 
-  font-weight: 600; /* From original CSS */
-  color: var(--text); 
-  /* ENHANCEMENT: Added transition */
-  transition: background-color 0.2s ease, box-shadow 0.2s ease, outline 0.2s ease;
+/* COMPLEX: Shine/glint pseudo-element */
+.button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.6s var(--ease-smooth);
 }
 
-/* -----------------------------
- * INTERACTIVE STATES
- * ----------------------------- */
-
-/* Input Focus (From original CSS) */
-.contact-left .input:focus,
-.contact-left .input:focus-visible { 
-  outline: none; 
-  box-shadow: 0 6px 20px rgba(16,185,129,0.12); /* Green glow */
-  border-color: rgba(34,197,94,0.7); /* Green border */
+/* Animate shine on hover */
+.button:hover::before {
+  transform: translateX(200%) skewX(-15deg);
 }
 
-/* Button States */
-.contact-left .button:hover {
-  filter: brightness(1.15); /* ENHANCEMENT */
+.button:hover {
+  transform: translateZ(10px) translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px var(--glow-color-strong);
+  animation-play-state: paused; /* Pause pulse, use hover shadow */
 }
-.contact-left .button:active {
-  filter: brightness(0.95); /* ENHANCEMENT */
-  transform: scale(0.98); /* ENHANCEMENT */
+
+.button:active {
+  transform: translateZ(5px) translateY(0px) scale(0.98);
+  filter: brightness(0.9);
 }
-.contact-left .button:focus-visible {
-  outline: 2px solid rgba(34,197,94,0.7); /* ENHANCEMENT */
-  outline-offset: 2px;
+
+.button:focus-visible {
+  outline: 3px solid var(--green-light);
+  outline-offset: 3px;
 }
-.contact-left .button:disabled {
-  filter: grayscale(0.5) brightness(0.7);
+
+.button:disabled {
+  filter: grayscale(0.7) brightness(0.7);
+  box-shadow: none;
+  animation: none;
   cursor: not-allowed;
 }
 
-/* Badge States */
-.social-badges .badge:hover {
-  background: rgba(255,255,255,0.06); /* ENHANCEMENT */
+/* =========================
+   11. COMPLEX SOCIAL BADGES
+   ========================= */
+
+.social-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
-.social-badges .badge:focus-visible {
-  outline: 2px solid rgba(34,197,94,0.7); /* ENHANCEMENT */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.6rem;
+  
+  /* Mini "smoking glass" card */
+  background: var(--input-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.02);
+  
+  font-weight: 500;
+  color: var(--text-light);
+  text-decoration: none;
+  
+  transform: translateZ(20px); /* 3D pop-out */
+  transition: all 0.3s var(--ease-smooth);
+}
+
+/* Icon styling */
+.badge svg {
+  font-size: 1.25rem;
+  color: var(--green-light);
+  transition: color 0.3s var(--ease-smooth);
+}
+
+.badge:hover {
+  background: var(--card-bg);
+  border-color: var(--glass-border-hover);
+  color: #fff;
+  transform: translateZ(20px) translateY(-4px) scale(1.05);
+  box-shadow: 0 5px 15px var(--glow-color);
+}
+
+.badge:hover svg {
+  color: #fff;
+}
+
+.badge:focus-visible {
+  outline: 2px solid var(--green-light);
   outline-offset: 2px;
 }
 
+/* =========================
+   12. MOBILE-SPECIFIC FIXES
+   ========================= */
 
-/* -----------------------------
- * RESPONSIVE (Desktop)
- * ----------------------------- */
-
-@media (min-width: 1024px) {
-  /* Switch to 2-column grid */
-  .contact-grid { 
-    grid-template-columns: 1fr 380px; 
-    gap: 2.5rem; 
-  }
-
-  /* Stretch right cards to balance visual weight */
-  .contact-right .contact-info-card { 
-    flex: 0 1 auto; 
-  }
-  .contact-right .social-card { 
-    flex: 0 1 auto; 
-  }
-}
-
-/* Larger desktop padding */
-@media (min-width: 1200px) {
-  .contact-left .contact-form-card { 
-    padding: 1.6rem; 
-  }
-  .contact-right .contact-info-card, 
-  .contact-right .social-card { 
-    padding: 1.2rem; 
-  }
-}
-
-/* Mobile-only overrides (if any, most is mobile-first) */
 @media (max-width: 1023px) {
-  .contact-grid { 
-    padding: 0; /* Remove side padding on small screens */
-  }
-  .contact-left .contact-form-card, 
-  .contact-right .contact-info-card, 
-  .contact-right .social-card { 
-    padding: 1rem; 
-  }
-  /* On mobile, stack cards from the top */
-  .contact-right { 
-    justify-content: flex-start; 
+  /* Disable 3D transforms on mobile for performance */
+  .card h2, .card h3,
+  .input-group label,
+  #form-status,
+  .button,
+  .badge {
+    transform: none;
   }
 }

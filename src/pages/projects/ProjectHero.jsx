@@ -30,6 +30,7 @@ const ProjectHero = () => {
           <strong> React</strong>, <strong>TypeScript</strong>, <strong>Express</strong>, <strong>Python</strong>,
           <strong> AI</strong>, <strong>Firebase</strong>, and more. Each project reflects my passion for solving real-world problems and crafting seamless user experiences.
         </p>
+        <br />
         <a href="https://github.com/Shashwath-K" target="_blank" rel="noopener noreferrer" className="button">
           <i className="devicon-github-original"></i> View All Repositories
         </a>
