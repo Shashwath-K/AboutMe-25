@@ -156,6 +156,7 @@ const Hero = () => {
                 - `justify-center` centers the groups within the main container.
                 - `items-center` aligns the groups (e.g., centers the Resume button horizontally when stacked).
               */}
+              <br />
               <div className="mt-16 p-8 flex flex-col md:flex-row flex-wrap gap-4 items-center justify-center">
 
                 {/* 1. View Resume Button (Group 1) */}

@@ -57,7 +57,7 @@ return (
 
 
 {/* SUMMARY */}
-<section className="section summary-section px-6 py-16 bg-[#0b0b10]">
+<section className="section-about summary-section px-6 py-16 bg-[#0b0b10]">
 <div className="max-w-5xl mx-auto">
 {/* This component replicates the fade-in-on-scroll animation */}
 <RevealOnScroll>
@@ -74,7 +74,7 @@ dangerouslySetInnerHTML={{ __html: summaryText }}
 
 
 {/* EXPERIENCE */}
-<section className="section px-6 py-20 bg-[#0e0e14]">
+<section className="section-about px-6 py-20 bg-[#0e0e14]">
 <div className="max-w-6xl mx-auto">
 <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
 <div className="experience-wrapper">
@@ -93,7 +93,7 @@ description={job.description}
 
 
 {/* SKILLS */}
-<section className="section px-6 py-20 bg-[#0b0b10]">
+<section className="section-about px-6 py-20 bg-[#0b0b10]">
 <div className="max-w-6xl mx-auto">
 <h2 className="text-3xl font-bold text-center mb-10">Technical Skills</h2>
 <div className="skills-grid">
