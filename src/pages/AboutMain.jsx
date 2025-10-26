@@ -4,7 +4,7 @@ import AboutHero from './about/AboutHero.jsx';
 import SkillCard from './about/SkillCard.jsx';
 import ExperienceCard from './about/ExperienceCard.jsx';
 import RevealOnScroll from './about/RevealOnScroll.jsx';
-import '../components/styles/about.css'; 
+import '../components/styles/About.css'; 
 
 // 1. IMPORTED React Icons
 import {

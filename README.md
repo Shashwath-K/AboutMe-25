@@ -1,6 +1,6 @@
 # Shashwath KS - Personal Portfolio (v2025)
 
-[![Live Site](https://img.shields.io/badge/View_Live_Site-22C55E?style=for-the-badge&logo=vercel&logoColor=white)](https://your-live-url.com) This repository contains the complete source code for my personal portfolio website, built from scratch with **React**, **Vite**, and **Tailwind CSS**. It is a fully-responsive, multi-page application designed to showcase my projects, skills, and creative work through a dynamic and highly animated interface.
+This repository contains the complete source code for my personal portfolio website, built from scratch with **React**, **Vite**, and **Tailwind CSS**. It is a fully-responsive, multi-page application designed to showcase my projects, skills, and creative work through a dynamic and highly animated interface.
 
 ![Portfolio Demo GIF](https://your-image-host.com/demo.gif)
 ---
