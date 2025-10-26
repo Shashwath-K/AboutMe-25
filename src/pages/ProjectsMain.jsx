@@ -64,15 +64,7 @@ const ProjectsMain = () => {
       <main id="main-content" className="min-h-screen">
         {/* Hero Section */}
         <ProjectHero />
-
-        {/* Featured Projects Title */}
-        <section className="featured-heading text-center py-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-2">Featured Projects</h2>
-          <p className="text-gray-400 max-w-2xl mx-auto">Here are some of my best works showcasing different stacks and problem-solving approaches.</p>
-        </section>
-
         {/* Projects Section */}
-        {/* We now map over the data array to render each card */}
         <div id="projects-container" className="projects-section">
           {projectsData.map((project, index) => (
             <ProjectCard

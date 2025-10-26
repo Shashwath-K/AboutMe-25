@@ -1,55 +1,60 @@
-import React, { useRef } from 'react';
+import React from 'react';
+import { SiGithub } from 'react-icons/si'; // 1. Import the react-icon
 
+/**
+ * Re-imagined ProjectCard.
+ * - Uses react-icons.
+ * - Removes all JS-based hover logic and utility classes.
+ * - Relies entirely on the external 'projects.css' for styling and animation.
+ * - Uses the HTML structure expected by 'projects.css'.
+ */
 const ProjectCard = ({ title, description, techStack, imageUrl, altText, githubUrl }) => {
-  const cardRef = useRef(null);
-
-  const handleMouseMove = (e) => {
-    if (!cardRef.current) return;
-    
-    const card = cardRef.current;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-
-    const rotateX = (y / rect.height) * -30; // Max rotation 30deg
-    const rotateY = (x / rect.width) * 30;  // Max rotation 30deg
-
-    card.style.setProperty('--transform-3d', `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
-  };
-
-  const handleMouseLeave = () => {
-    if (cardRef.current) {
-      cardRef.current.style.setProperty('--transform-3d', 'rotateX(0deg) rotateY(0deg)');
-    }
-  };
+  
+  // 2. REMOVED: All useRef, handleMouseMove, and handleMouseLeave logic.
+  // Your complex 'projects.css' file handles all hover and 3D effects.
 
   return (
-    <section
-      ref={cardRef}
-      className="project-card glass fade-in p-6 rounded-lg shadow-xl transition-transform transform hover:scale-105"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{'--transform-3d': 'rotateX(0deg) rotateY(0deg)'}} // Initial CSS variable
-    >
-      <div className="project-left mb-4 sm:mb-0">
-        <img src={imageUrl} alt={altText} className="paused-gif rounded-md" />
+    // 3. CLEANED: The <section> now only uses the 'project-card' class.
+    // All utility classes and JS event handlers are gone.
+    <section className="project-card">
+      
+      {/* 4. STRUCTURED to match projects.css */}
+      <div className="project-image-wrapper">
+        <img 
+          src={imageUrl} 
+          alt={altText} 
+          className="paused-gif" // This class is fine if you still use it
+        />
       </div>
-      <div className="project-right flex flex-col justify-between h-full">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-white mb-4">{title}</h2>
-        <div className="tech-stack flex gap-2 flex-wrap mb-4">
-          {techStack.map((tech, index) => (
-            <span key={index} className="pill">
-              <i className={tech.icon}></i> {tech.name}
+
+      {/* 5. STRUCTURED to match projects.css */}
+      <div className="project-content">
+        <h2>{title}</h2>
+        
+        <p className="description">{description}</p>
+        
+        <div className="tech-stack">
+          {techStack.map((tech) => (
+            // 6. FIXED: Renders the icon component directly
+            <span key={tech.name} className="pill">
+              {tech.icon} {tech.name}
             </span>
           ))}
         </div>
-        <p className="description text-gray-300 mb-4 text-base sm:text-lg">{description}</p>
+        
         <div className="project-links">
-          <a href={githubUrl} target="_blank" rel="noopener noreferrer" className="icon-link">
-            <i className="devicon-github-original"></i> GitHub
+          <a 
+            href={githubUrl} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="icon-link"
+          >
+            {/* 7. REPLACED: <i> tag with <SiGithub> component */}
+            <SiGithub /> GitHub
           </a>
         </div>
       </div>
+
     </section>
   );
 };
