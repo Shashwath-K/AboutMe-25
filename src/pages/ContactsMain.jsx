@@ -3,7 +3,7 @@ import Footer from '../components/Footer'; // Placeholder
 import ContactHero from './contact/ContactHero.jsx';
 import ContactForm from './contact/ContactForm.jsx';
 import ContactDetails from './contact/ContactDetails.jsx';
-import '../components/styles/contact.css';
+import '../components/styles/Contact.css';
 
 const Contacts = () => {
   return (
