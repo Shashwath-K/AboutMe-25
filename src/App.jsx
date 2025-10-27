@@ -10,21 +10,21 @@ import FloatingIsland from './components/FloatingIsland';
 import ScrollToTop from './components/ScrollToTop';
 import './components/FloatingIsland.css';
 
-const LayoutWrapper = ({ children, darkMode, toggleDarkMode, mainRef }) => {
+const LayoutWrapper = ({ children, mainRef }) => {
   return (
     <main
       ref={mainRef}
-      className={`page-wrapper page-transition ${darkMode ? 'dark' : 'light'}`}
+      className={`page-wrapper page-transition`}
     >
       {children}
-      <FloatingIsland darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
+      <FloatingIsland />
     </main>
   );
 };
 
 
 const App = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(true);
   const mainRef = useRef(null);
 
   const toggleDarkMode = () => setDarkMode(prev => !prev);

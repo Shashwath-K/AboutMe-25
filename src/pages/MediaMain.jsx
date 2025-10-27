@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Footer from '../components/Footer';
 import '../components/styles/media.css'; // Ensure this path is correct
 
 // --- Data ---
@@ -199,6 +200,7 @@ const MediaMain = () => {
             onImageSelect={setSelectedImage} 
           />
         </div>
+        <Footer />
       </main>
       
       {/* The lightbox is rendered here when an image is selected */}
