@@ -32,6 +32,7 @@ const filterCategories = [
 
 const Lightbox = ({ item, onClose }) => {
   useEffect(() => {
+    // Close lightbox on 'Escape' key press
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -42,9 +43,11 @@ const Lightbox = ({ item, onClose }) => {
   }, [onClose]);
 
   return (
+    // The backdrop has the onClick to close
     <div className="lightbox-backdrop" onClick={onClose}>
-      <button className="lightbox-close-btn" aria-label="Close image view">&times;</button>
+      {/* The content stops the click from propagating, so clicking the image won't close it */}
       <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+        {/* The 'x' button has been removed as requested */}
         <img src={item.img} alt={item.title} className="lightbox-image" />
         <div className="lightbox-caption">
           <h3>{item.title}</h3>
@@ -70,10 +73,9 @@ const MediaHero = () => (
       </div>
       <div className="hero-bg-overlay" />
       
-      {/* FIX: Added `hero-gradient-title` class to H1.
-        Kept zIndex style to ensure content is above the overlay.
-      */}
+      {/* The content div is given a z-index to ensure it's above the overlay */}
       <div className="hero-content" style={{ position: 'relative', zIndex: 20 }}>
+        {/* Corrected class name to apply gradient */}
         <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">
           Media & Gallery
         </h1>
@@ -117,6 +119,7 @@ const MediaCards = ({ items, activeFilter, filtering, onImageSelect }) => {
     <div className="gallery-grid">
       {items.map((item, index) => {
         const show = activeFilter === 'all' || item.type === activeFilter;
+        // This logic ensures smooth filtering and reflow
         const displayStyle = show || filtering ? 'flex' : 'none';
         const style = {
           '--delay': `${index * 0.055}s`,
@@ -172,10 +175,12 @@ const MediaMain = () => {
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
+    // This timeout matches the CSS animation for a smooth reflow
     timeoutRef.current = setTimeout(() => {
       setIsFiltering(false);
-    }, 500);
+    }, 500); 
   };
+  
   return (
     <>
       <main id="main-content">
@@ -196,6 +201,7 @@ const MediaMain = () => {
         </div>
       </main>
       
+      {/* The lightbox is rendered here when an image is selected */}
       {selectedImage && (
         <Lightbox 
           item={selectedImage} 
