@@ -122,7 +122,7 @@ const Hero = () => {
 
           {/* Text Content */}
           <div className="md:col-span-8 space-y-6">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight hero-title">
+            <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">
               Shashwath KS
             </h1>
 

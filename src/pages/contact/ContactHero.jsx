@@ -31,7 +31,7 @@ const ContactHero = () => {
         {/* Overlay for contrast */}
       <div className="hero-bg-overlay" />
       <div className="hero-inner text-center flex flex-col items-center justify-center relative z-10">
-        <h1 className="hero-title text-4xl sm:text-5xl font-extrabold mb-4">Get in touch</h1>
+        <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">Get in touch</h1>
         <p className="hero-content text-base sm:text-lg max-w-2xl leading-relaxed text-gray-200">
           Whether you have a question about a project, want to collaborate, or just say Hi! drop a message below. I typically respond within 48 hrs.
         </p>
