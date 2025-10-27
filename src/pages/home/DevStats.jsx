@@ -18,18 +18,17 @@ const GITHUB_EVENTS_URL = `https://api.github.com/users/${GITHUB_USERNAME}/event
 // --- WakaTime Config ---
 // 3. ADDED: WakaTime URL from your function
 const WAKATIME_URL = 'https://wakatime.com/share/@ShashwathK/0942d213-cb36-417f-8482-4b108e70ac85.json';
-
 // --- Socials Config ---
 // 4. CHANGED: Updated Twitter to X
 const socials = [
   { name: "GitHub", link: "https://github.com/Shashwath-K", icon: <SiGithub />, class: "social__btn--github" },
-  { name: "LinkedIn", link: "#", icon: <SiLinkedin />, class: "social__btn--linkedin" },
-  { name: "X", link: "#", icon: <SiX />, class: "social__btn--x" }, // CHANGED
-  { name: "Instagram", link: "#", icon: <SiInstagram />, class: "social__btn--instagram" },
-  { name: "Spotify", link: "#", icon: <SiSpotify />, class: "social__btn--spotify" },
-  { name: "YouTube", link: "#", icon: <SiYoutube />, class: "social__btn--youtube" },
-  { name: "Facebook", link: "#", icon: <SiFacebook />, class: "social__btn--facebook" },
-  { name: "Discord", link: "#", icon: <SiDiscord />, class: "social__btn--discord" },
+  { name: "LinkedIn", link: "https://www.linkedin.com/in/shashwath-kukkunoor-2b4277225/", icon: <SiLinkedin />, class: "social__btn--linkedin" },
+  { name: "X", link: "https://x.com/shashwath_k15", icon: <SiX />, class: "social__btn--x" }, // CHANGED
+  { name: "Instagram", link: "https://www.instagram.com/shashwath_kukku?igsh=cXprb2JnMGRqMmZu", icon: <SiInstagram />, class: "social__btn--instagram" },
+  { name: "Spotify", link: "https://open.spotify.com/user/31omectxpm23tbqslxwj5b24a5qa", icon: <SiSpotify />, class: "social__btn--spotify" },
+  { name: "YouTube", link: "https://www.youtube.com/@shashwath.k.s5239", icon: <SiYoutube />, class: "social__btn--youtube" },
+  { name: "Facebook", link: "https://www.facebook.com/profile.php?id=100009465161906", icon: <SiFacebook />, class: "social__btn--facebook" },
+  { name: "Discord", link: "https://discord.com/users/shashwath_k15", icon: <SiDiscord />, class: "social__btn--discord" },
 ];
 
 // --- GitHub Stats Initial State ---

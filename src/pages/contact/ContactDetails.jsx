@@ -31,19 +31,19 @@ const socialLinks = [
     name: 'LinkedIn',
     label: 'LinkedIn',
     icon: <SiLinkedin />,
-    href: '#', // Add your link
+    href: 'https://www.linkedin.com/in/shashwath-kukkunoor-2b4277225/', // Add your link
   },
   {
     name: 'X',
     label: 'X / Twitter',
     icon: <SiX />, // Changed from Twitter
-    href: '#', // Add your link
+    href: 'https://x.com/shashwath_k15', // Add your link
   },
   {
     name: 'Instagram',
     label: 'Instagram',
     icon: <SiInstagram />,
-    href: '#', // Add your link
+    href: 'https://www.instagram.com/shashwath_kukku?igsh=cXprb2JnMGRqMmZu', // Add your link
   },
 ];
 
