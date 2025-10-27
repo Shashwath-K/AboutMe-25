@@ -1,272 +1,312 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import { motion, AnimatePresence, useTime, useTransform } from "framer-motion";
-import logo from "../assets/header/favicon.ico"; // TODO: Replace with your actual logo path
+// Removed logo import
 
 // --- Configuration ---
-const LOADER_VISIBLE_DURATION_MS = 4500; // Total time before fade starts
-const FADE_OUT_DURATION_MS = 500;      // Fade out time
-const MATRIX_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝabcdefghijklmnopqrstuvwxyz<>/?!@#$%^&*()-+=~[]{}|;:,.";
-const FONT_SIZE = 16;
-const RAIN_SPEED = 50; // Milliseconds per character update
+const LOADER_VISIBLE_DURATION_MS = 7000; // 7 seconds visible time
+const FADE_OUT_DURATION_MS = 600;      // Fade out time
 
-// --- Background Grid Component (Matrix Themed) ---
-const AnimatedMatrixGrid = () => {
-  const time = useTime();
-  const rotate = useTransform(time, [0, 20000], [0, 360], { clamp: false }); // Slower rotation
+// --- Matrix Theming ---
+const MATRIX_GREEN_DARK = "#003b00";
+const MATRIX_GREEN = "#22c55e"; // Tailwind green-500
+const MATRIX_GREEN_LIGHT = "#a3e635"; // Tailwind lime-400
+const MATRIX_GREEN_BRIGHT = "#ccffdd";
+const MATRIX_BLACK = "#000000";
 
-  return (
-    <motion.div
-      className="absolute inset-0 w-full h-full overflow-hidden opacity-15" // Matrix grid opacity
-      style={{ perspective: '1000px' }}
-    >
-      <motion.div
-        style={{
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          width: '200%', // Larger grid
-          height: '200%',
-          translateX: '-50%',
-          translateY: '-50%',
-          rotateX: '70deg', // Tilt
-          rotateZ: rotate,
-          // Green grid lines
-          backgroundImage: `linear-gradient(to right, rgba(34, 197, 94, 0.2) 1px, transparent 1px),
-                           linear-gradient(to bottom, rgba(34, 197, 94, 0.2) 1px, transparent 1px)`,
-          backgroundSize: '35px 35px', // Grid size
-          maskImage: 'radial-gradient(ellipse at center, white 10%, transparent 60%)',
-          WebkitMaskImage: 'radial-gradient(ellipse at center, white 10%, transparent 60%)',
-        }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5, delay: 0.2 }}
-      />
-    </motion.div>
-  );
-};
+// Character sets for rain & text animation
+const KATAKANA_CHARS = "ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ";
+const ASCII_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz<>/?!@#$%^&*()-+=~[]{}|;:,.";
+const BINARY_CHARS = "01";
+const CRYPTIC_CHARS = "ΣΔΠΓΞΨΩαβγδεζηθικλμνξπρστυφχψω"; // Greek letters for cryptic text
 
-// --- Matrix Rain Component ---
-const MatrixRain = () => {
-  const [columns, setColumns] = useState([]);
-  const containerRef = useRef(null);
+// Animation Constants
+const GRID_SIZE = 60; // Increased grid size
+const RAIN_FONT_SIZE = 16;
+const BASE_RAIN_SPEED = 80;
 
-  useEffect(() => {
-    const calculateColumns = () => {
-      if (!containerRef.current) return;
-      const width = containerRef.current.offsetWidth;
-      const numCols = Math.floor(width / FONT_SIZE);
-      setColumns(Array.from({ length: numCols }).map((_, i) => ({
-        id: i,
-        // Start drops at different times/positions
-        initialDelay: Math.random() * 5000,
-        yPosition: Math.random() * -window.innerHeight * 1.5,
-      })));
-    };
+// --- Helper: Get random character ---
+const getRandomChar = (charSet) => charSet[Math.floor(Math.random() * charSet.length)];
 
-    calculateColumns();
-    window.addEventListener('resize', calculateColumns);
-    return () => window.removeEventListener('resize', calculateColumns);
-  }, []);
+// --- Component: Pulsing 3D Grid ---
+const PulsingGrid = () => {
+    const time = useTime();
+    const rotateZ = useTransform(time, [0, 30000], [0, 360], { clamp: false });
+    const lineOpacity = useTransform(time, t => 0.08 + 0.06 * Math.sin(t / 2000)); // Increased base opacity
 
-  return (
-    <div
-      ref={containerRef}
-      className="absolute inset-0 w-full h-full overflow-hidden opacity-40 pointer-events-none" // Rain opacity
-      style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: FONT_SIZE }}
-    >
-      {columns.map(col => (
-        <MatrixColumn key={col.id} initialDelay={col.initialDelay} initialY={col.yPosition} />
-      ))}
-    </div>
-  );
-};
-
-// --- Single Column for Matrix Rain ---
-const MatrixColumn = ({ initialDelay, initialY }) => {
-  const [chars, setChars] = useState([]);
-  const columnRef = useRef(null);
-  const intervalRef = useRef(null);
-  const yPosition = useRef(initialY);
-
-  useEffect(() => {
-    // Delay the start of the rain effect for this column
-    const startTimeout = setTimeout(() => {
-      intervalRef.current = setInterval(() => {
-        if (!columnRef.current) return;
-
-        const newChar = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
-        const isHighlight = Math.random() > 0.9; // 10% chance to be highlighted
-
-        setChars(prevChars => {
-          // Add new char at the current yPosition
-          const updatedChars = [
-            ...prevChars,
-            { char: newChar, y: yPosition.current, highlight: isHighlight, id: Date.now() + Math.random() }
-          ];
-
-          // Fade out older characters gradually and remove if too far off screen
-          const screenHeight = window.innerHeight;
-          const fadedChars = updatedChars.map(c => ({
-            ...c,
-            // Fade logic can be added here if needed (e.g., based on time or position)
-          })).filter(c => c.y < yPosition.current + screenHeight * 1.2); // Remove chars far below
-
-          return fadedChars;
-        });
-
-        // Move the "head" of the rain drop down
-        yPosition.current += FONT_SIZE;
-
-        // Reset if it goes way off screen
-        if (yPosition.current > window.innerHeight * 1.5) {
-          yPosition.current = Math.random() * -window.innerHeight; // Restart from top
-          setChars([]); // Clear old chars for this drop
-        }
-
-      }, RAIN_SPEED);
-    }, initialDelay);
-
-    // Cleanup interval on unmount
-    return () => {
-      clearTimeout(startTimeout);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [initialDelay]);
-
-  return (
-    <div
-      ref={columnRef}
-      className="absolute top-0 h-full"
-      style={{ left: `${columnRef.current ? columnRef.current.offsetLeft : 0}px`, writingMode: 'vertical-rl', textOrientation: 'upright' }}
-    >
-      {chars.map((c, index) => (
-        <span
-          key={c.id}
-          style={{
-            position: 'absolute',
-            top: c.y,
-            color: c.highlight ? '#ccffdd' : '#22c55e', // Highlight vs standard green
-            textShadow: c.highlight ? '0 0 8px #5ee4a3' : 'none',
-            opacity: 1 - (yPosition.current - c.y) / (window.innerHeight * 0.5), // Fade out as it gets older
-            transform: `translateY(${FONT_SIZE * index}px)`, // Position characters vertically
-          }}
+    return (
+        <motion.div
+            className="absolute inset-0 w-full h-full overflow-hidden"
+            style={{ perspective: '1200px' }}
         >
-          {c.char}
-        </span>
-      ))}
-    </div>
-  );
+            <motion.div
+                style={{
+                    position: 'absolute',
+                    top: '50%', left: '50%',
+                    width: '300%', height: '300%', // Made grid much larger
+                    translateX: '-50%', translateY: '-50%',
+                    rotateX: '75deg',
+                    rotateZ: rotateZ,
+                    backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`, // Larger squares
+                    backgroundImage: useTransform(lineOpacity, o =>
+                        `linear-gradient(to right, rgba(34, 197, 94, ${o}) 1px, transparent 1px),
+                         linear-gradient(to bottom, rgba(34, 197, 94, ${o}) 1px, transparent 1px)`
+                    ),
+                    maskImage: 'radial-gradient(ellipse at center, white 5%, transparent 50%)', // Adjusted mask
+                    WebkitMaskImage: 'radial-gradient(ellipse at center, white 5%, transparent 50%)',
+                }}
+                initial={{ opacity: 0, scale: 1.1 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 2.5, delay: 0.1, ease: 'easeOut' }}
+            />
+        </motion.div>
+    );
+};
+
+// --- Component: Matrix Rain Layer ---
+// (This component remains largely the same as the previous complex version)
+const MatrixRainLayer = ({
+    charSet = KATAKANA_CHARS,
+    fontSize = RAIN_FONT_SIZE,
+    opacity = 0.5,
+    speed = BASE_RAIN_SPEED,
+    highlightChance = 0.08,
+    zIndex = 1,
+    blur = 0,
+}) => {
+    const [columns, setColumns] = useState([]);
+    const containerRef = useRef(null);
+
+    useEffect(() => {
+        const calculateColumns = () => {
+            if (!containerRef.current) return;
+            const width = containerRef.current.offsetWidth;
+            const numCols = Math.floor(width / (fontSize * 0.8));
+            setColumns(Array.from({ length: numCols }).map((_, i) => ({
+                id: i,
+                initialDelay: Math.random() * 8000,
+                yPosition: Math.random() * -window.innerHeight * 2,
+                speedVariance: Math.random() * 0.5 + 0.75,
+            })));
+        };
+        let resizeTimeout;
+        const handleResize = () => { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(calculateColumns, 200); };
+        calculateColumns();
+        window.addEventListener('resize', handleResize);
+        return () => { clearTimeout(resizeTimeout); window.removeEventListener('resize', handleResize); };
+    }, [fontSize]);
+
+    return (
+        <div
+            ref={containerRef}
+            className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none"
+            style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: `${fontSize}px`, opacity: opacity, zIndex: zIndex, filter: blur > 0 ? `blur(${blur}px)` : 'none' }}
+        >
+            {columns.map(col => (
+                <MatrixColumn
+                    key={col.id}
+                    columnIndex={col.id}
+                    charSet={charSet}
+                    fontSize={fontSize}
+                    initialDelay={col.initialDelay}
+                    initialY={col.yPosition}
+                    speed={speed * col.speedVariance}
+                    highlightChance={highlightChance}
+                />
+            ))}
+        </div>
+    );
+};
+
+// --- Component: Single Matrix Rain Column ---
+// (This component remains largely the same as the previous complex version)
+const MatrixColumn = ({ columnIndex, charSet, fontSize, initialDelay, initialY, speed, highlightChance }) => {
+    const [chars, setChars] = useState([]);
+    const intervalRef = useRef(null);
+    const yPosition = useRef(initialY);
+    const leftPosition = useMemo(() => `${columnIndex * (fontSize * 0.7)}px`, [columnIndex, fontSize]);
+
+    useEffect(() => {
+        const startTimeout = setTimeout(() => {
+            intervalRef.current = setInterval(() => {
+                const newChar = getRandomChar(charSet);
+                const isHighlight = Math.random() < highlightChance;
+                setChars(prevChars => {
+                    const newCharData = { char: newChar, y: yPosition.current, highlight: isHighlight, id: performance.now() + Math.random(), opacity: 1 };
+                    const updatedChars = prevChars.map(c => ({ ...c, opacity: Math.max(0, 1 - (yPosition.current - c.y) / (window.innerHeight * 0.6)) })).filter(c => c.opacity > 0.05);
+                    return [newCharData, ...updatedChars];
+                });
+                yPosition.current += fontSize;
+                if (yPosition.current > window.innerHeight * 1.3) { yPosition.current = Math.random() * -window.innerHeight * 0.5; }
+            }, speed);
+        }, initialDelay);
+        return () => { clearTimeout(startTimeout); if (intervalRef.current) clearInterval(intervalRef.current); };
+    }, [initialDelay, speed, charSet, fontSize, highlightChance]);
+
+    return (
+        <div className="absolute top-0 h-full" style={{ left: leftPosition, width: `${fontSize}px` }}>
+            {chars.map(c => (
+                <span key={c.id} style={{ position: 'absolute', top: `${c.y}px`, left: 0, color: c.highlight ? MATRIX_GREEN_BRIGHT : MATRIX_GREEN, textShadow: c.highlight ? `0 0 10px ${MATRIX_GREEN_LIGHT}` : 'none', opacity: c.opacity, transition: 'opacity 0.5s linear' }}>
+                    {c.char}
+                </span>
+            ))}
+        </div>
+    );
 };
 
 
-// --- Animated Text Component (Matrix Themed) ---
-const GlitchText = ({ text, delay }) => {
-  const characters = text.split("");
-  return (
-    <motion.div
-      className="flex justify-center overflow-hidden font-mono tracking-widest" // Use monospace font
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: {},
-        visible: { transition: { staggerChildren: 0.06, delayChildren: delay } }
-      }}
-    >
-      {characters.map((char, index) => (
+// --- Component: Code Reveal Text ---
+// (Modified to use Doto font if possible via className, otherwise inline)
+const CodeRevealText = ({ text, delay, className = "", charSet = ASCII_CHARS + BINARY_CHARS, fontSize = "inherit", cryptic = false }) => {
+    const characters = text.split("");
+    const baseDelay = delay;
+    const animationDuration = cryptic ? 0.08 : 0.05; // Slower for cryptic
+
+    const variants = {
+        hidden: { opacity: 0 },
+        visible: (i) => ({
+            opacity: 1,
+            transition: { delay: baseDelay + i * animationDuration },
+        }),
+    };
+
+    return (
+        <motion.div
+            className={`flex justify-center flex-wrap tracking-wider ${className}`}
+            style={{ fontFamily: "'Doto', 'Courier New', monospace", fontSize: fontSize }} // Apply Doto font
+            initial="hidden"
+            animate="visible"
+            aria-label={text}
+        >
+            {characters.map((char, index) => (
+                <CharacterAnimator
+                    key={`${char}-${index}`}
+                    targetChar={char === " " ? "\u00A0" : char}
+                    custom={index}
+                    variants={variants}
+                    charSet={charSet}
+                    cycleDuration={baseDelay + index * animationDuration + (cryptic ? 1.0 : 0.6)} // Longer cycle for cryptic
+                    cryptic={cryptic}
+                />
+            ))}
+        </motion.div>
+    );
+};
+
+// Helper for CodeRevealText - animates a single character
+const CharacterAnimator = ({ targetChar, custom, variants, charSet, cycleDuration, cryptic }) => {
+    const [currentChar, setCurrentChar] = useState(getRandomChar(charSet));
+    const time = useTime();
+    const shouldSettle = useTransform(time, t => t / 1000 > cycleDuration);
+    const intervalRef = useRef(null);
+
+    useEffect(() => {
+        intervalRef.current = setInterval(() => {
+            if (shouldSettle.get()) {
+                setCurrentChar(targetChar);
+                clearInterval(intervalRef.current);
+            } else {
+                setCurrentChar(getRandomChar(charSet));
+            }
+        }, cryptic ? 80 : 50); // Slower cycle for cryptic chars
+
+        return () => clearInterval(intervalRef.current);
+    }, [targetChar, charSet, shouldSettle, cryptic]);
+
+    return (
         <motion.span
-          key={`${char}-${index}`}
-          className="inline-block" // Needed for transform
-          variants={{
-            // Glitchy reveal
-            hidden: { opacity: 0, y: "50%", filter: "blur(3px) contrast(3)", scale: 1.5 },
-            visible: { opacity: 1, y: "0%", filter: "blur(0px) contrast(1)", scale: 1 }
-          }}
-          transition={{ type: "spring", stiffness: 100, damping: 10, mass: 0.5 }}
-          style={{
-             // Add subtle random color shifts and glows
-            color: `hsl(${120 + (Math.random() - 0.5) * 20}, 70%, ${60 + Math.random() * 20}%)`,
-            textShadow: `0 0 ${Math.random() * 5 + 2}px rgba(34, 197, 94, 0.5)`
-          }}
+            custom={custom}
+            variants={variants}
+            className="inline-block"
+            style={{
+                color: cryptic
+                    ? `hsl(${120 + (Math.random() - 0.5) * 30}, 60%, ${40 + Math.random() * 15}%)` // Muted green for cryptic
+                    : `hsl(${120 + (Math.random() - 0.5) * 15}, 80%, ${70 + Math.random() * 15}%)`, // Brighter for main
+                textShadow: `0 0 ${Math.random() * (cryptic ? 2 : 4) + 1}px ${MATRIX_GREEN}`
+              }}
         >
-          {char === " " ? "\u00A0" : char}
+            {currentChar}
         </motion.span>
-      ))}
-    </motion.div>
-  );
+    );
 };
+
+
+// --- Component: Scan Line Overlay ---
+// (This component remains the same)
+const ScanLineOverlay = () => (
+    <div className="absolute inset-0 w-full h-full pointer-events-none opacity-10 z-30" style={{ background: `linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3) 50%)`, backgroundSize: `100% 4px` }} />
+);
 
 // --- Main Loader Component ---
 const WelcomeLoader = ({ onAnimationComplete }) => {
-  const [isVisible, setIsVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(true);
 
-  useEffect(() => {
-    const fadeOutTimer = setTimeout(() => setIsVisible(false), LOADER_VISIBLE_DURATION_MS);
-    const completionTimer = setTimeout(onAnimationComplete, LOADER_VISIBLE_DURATION_MS + FADE_OUT_DURATION_MS);
+    useEffect(() => {
+        const fadeOutTimer = setTimeout(() => setIsVisible(false), LOADER_VISIBLE_DURATION_MS);
+        const completionTimer = setTimeout(onAnimationComplete, LOADER_VISIBLE_DURATION_MS + FADE_OUT_DURATION_MS);
+        return () => { clearTimeout(fadeOutTimer); clearTimeout(completionTimer); };
+    }, [onAnimationComplete]);
 
-    return () => {
-      clearTimeout(fadeOutTimer);
-      clearTimeout(completionTimer);
-    };
-  }, [onAnimationComplete]);
+    return (
+        <AnimatePresence>
+            {isVisible && (
+                <motion.div
+                    key="matrix-loader-final"
+                    className="fixed inset-0 w-full h-full flex flex-col items-center justify-center z-[2500] overflow-hidden bg-black"
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 0, transition: { duration: FADE_OUT_DURATION_MS / 1000, ease: "easeOut" } }}
+                >
+                    {/* Background Layers */}
+                    <PulsingGrid />
+                    <MatrixRainLayer charSet={BINARY_CHARS} fontSize={12} opacity={0.15} speed={BASE_RAIN_SPEED * 1.5} zIndex={1} blur={1.5} />
+                    <MatrixRainLayer charSet={KATAKANA_CHARS} fontSize={RAIN_FONT_SIZE} opacity={0.3} speed={BASE_RAIN_SPEED} zIndex={2} highlightChance={0.1} />
+                    <MatrixRainLayer charSet={ASCII_CHARS} fontSize={14} opacity={0.2} speed={BASE_RAIN_SPEED * 0.8} zIndex={3} highlightChance={0.05} />
+                    <ScanLineOverlay />
 
-  return (
-    <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          key="matrix-loader"
-          className="fixed inset-0 w-full h-full flex flex-col items-center justify-center z-[2500] overflow-hidden bg-black" // Black background
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: FADE_OUT_DURATION_MS / 1000, ease: "easeInOut" }}
-        >
-          {/* Background Elements */}
-          <AnimatedMatrixGrid />
-          <MatrixRain />
+                    {/* Foreground Content - Centered */}
+                    <div className="relative z-10 flex flex-col items-center justify-center text-center p-4">
 
-          {/* Foreground Content */}
-          <div className="relative z-10 flex flex-col items-center justify-center text-center p-4">
-            {/* Logo (Optional) */}
-            <motion.img
-              src={logo} // Use your favicon or a dedicated logo
-              alt="Loading Portfolio"
-              initial={{ opacity: 0, scale: 0.7, filter: "blur(10px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.8, delay: 0.5, ease: "easeOut" }}
-              className="w-[80px] sm:w-[100px] mb-8" // Adjusted size
-              style={{ filter: "drop-shadow(0 0 15px rgba(34, 197, 94, 0.6))" }} // Green glow
-            />
+                        {/* Cryptic Subtext 1 (Top) */}
+                        <div className="mb-4 text-xs sm:text-sm text-green-700 opacity-60">
+                             <CodeRevealText
+                                text="Est. Connection :: SECURE_CHANNEL"
+                                delay={0.8}
+                                charSet={CRYPTIC_CHARS + BINARY_CHARS}
+                                cryptic={true}
+                             />
+                         </div>
 
-            {/* Animated Text */}
-            <div className="text-xl sm:text-2xl text-green-400">
-              <GlitchText text="LOADING ASSETS..." delay={1.2} />
-            </div>
-            <div className="mt-2 text-lg sm:text-xl text-green-500 opacity-80">
-              <GlitchText text="SHASHWATH K S" delay={1.8} />
-            </div>
-          </div>
+                        {/* Main Text: npm start */}
+                        <div className="text-3xl sm:text-5xl lg:text-6xl text-green-400 font-black" // Bolder font weight
+                           style={{ textShadow: `0 0 15px ${MATRIX_GREEN}` }}>
+                            <CodeRevealText text="npm start" delay={2.0} fontSize="inherit" />
+                        </div>
 
-          {/* Progress Bar */}
-          <div className="absolute bottom-0 left-0 w-full h-[3px] overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-to-r from-green-500 to-emerald-400"
-              initial={{ width: '0%' }}
-              animate={{ width: '100%' }}
-              transition={{
-                duration: LOADER_VISIBLE_DURATION_MS / 1000,
-                ease: 'linear',
-                delay: 0.2,
-              }}
-              style={{ boxShadow: '0 0 10px rgba(34, 197, 94, 0.7)'}} // Green glow
-            />
-          </div>
+                        {/* Cryptic Subtext 2 (Bottom) */}
+                        <div className="mt-4 text-xs sm:text-sm text-green-700 opacity-60">
+                            <CodeRevealText
+                                text="Executing:: /bin/portfolio_v2"
+                                delay={3.5}
+                                charSet={CRYPTIC_CHARS + ASCII_CHARS}
+                                cryptic={true}
+                            />
+                        </div>
+                    </div>
 
-        </motion.div>
-      )}
-    </AnimatePresence>
-  );
+                    {/* Progress Bar */}
+                    <div className="absolute bottom-0 left-0 w-full h-[3px] overflow-hidden z-20">
+                        <motion.div
+                            className="h-full bg-gradient-to-r from-green-400 via-emerald-400 to-green-500"
+                            initial={{ width: '0%' }}
+                            animate={{ width: '100%' }}
+                            transition={{ duration: LOADER_VISIBLE_DURATION_MS / 1000, ease: 'linear', delay: 0.1 }}
+                            style={{ boxShadow: `0 0 12px 1px ${MATRIX_GREEN}`}}
+                        />
+                    </div>
+
+                </motion.div>
+            )}
+        </AnimatePresence>
+    );
 };
-
-// --- Need to import useRef for MatrixRain ---
-import { useRef } from 'react';
 
 export default WelcomeLoader;
