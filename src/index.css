@@ -125,3 +125,15 @@ body::before {
   display: none;
   animation: scrollReset 0.1s linear;
 }
+/* Add this to your index.css or relevant CSS file */
+
+/* Target the container holding the pills */
+.footer .flex.flex-row.flex-wrap {
+  /* On screens smaller than 640px (Tailwind's 'sm' breakpoint) */
+  @media (max-width: 639px) {
+    /* Stack the pills vertically */
+    flex-direction: column;
+    /* Add vertical gap (adjust 1rem as needed for your "5%" feel) */
+    gap: 0.5rem; 
+  }
+}
