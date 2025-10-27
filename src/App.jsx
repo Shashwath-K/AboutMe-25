@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// 1. We already import useLocation, so we just need to use it
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import HomeMain from './pages/HomeMain';
 import ProjectsMain from './pages/ProjectsMain';
 import About from './pages/AboutMain';
 import ContactsMain from './pages/ContactsMain';
 import MediaMain from './pages/MediaMain';
 
-// 1. IMPORT the FloatingIsland component and its CSS
+// IMPORT the FloatingIsland component and its CSS
 import FloatingIsland from './components/FloatingIsland';
 import './components/FloatingIsland.css'; // Assuming this path
 
-// 2. MODIFY LayoutWrapper to include the theme and FloatingIsland
+// MODIFY LayoutWrapper to include the theme and FloatingIsland
 const LayoutWrapper = ({ children, darkMode, toggleDarkMode }) => {
+  
+  // 2. ADD THIS: Get the current page location
+  const location = useLocation();
+
+  // 3. ADD THIS: Use an effect to scroll to top on every page change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]); // This effect runs every time the path changes
+
   return (
-    // 3. APPLY the dark/light class here to theme all pages
+    // APPLY the dark/light class here to theme all pages
     <main className={darkMode ? 'dark' : 'light'}>
       
       {children} {/* This is where your <Routes> component will render */}
       
-      {/* 4. RENDER FloatingIsland here, outside the Routes */}
+      {/* RENDER FloatingIsland here, outside the Routes */}
       <FloatingIsland darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
     </main>
@@ -26,15 +36,15 @@ const LayoutWrapper = ({ children, darkMode, toggleDarkMode }) => {
 };
 
 const App = () => {
-  // 5. LIFTED STATE from HomeMain to App
+  // LIFTED STATE from HomeMain to App
   const [darkMode, setDarkMode] = useState(false);
 
-  // 6. LIFTED HANDLER from HomeMain to App
+  // LIFTED HANDLER from HomeMain to App
   const toggleDarkMode = () => {
     setDarkMode(prevMode => !prevMode);
   };
 
-  // 7. LIFTED EFFECT to update the <body> tag for global styles
+  // LIFTED EFFECT to update the <body> tag for global styles
   useEffect(() => {
     // This ensures your global CSS (like in index.css)
     // can react to the theme.
@@ -45,7 +55,7 @@ const App = () => {
   return (
     <>
       <Router>
-        {/* 8. PASS the state and handler to the LayoutWrapper */}
+        {/* PASS the state and handler to the LayoutWrapper */}
         <LayoutWrapper darkMode={darkMode} toggleDarkMode={toggleDarkMode}>
           <Routes>
             {/* Your page components now live inside the themed <main> tag

@@ -1,6 +1,6 @@
 // src/components/FloatingIsland.jsx (Updated)
 
-import React from 'react';
+import React, { useEffect } from 'react'; 
 import { Link, useLocation } from 'react-router-dom';
 import { 
   FaHome, 
@@ -19,13 +19,23 @@ const routes = [
   { path: '/contact', label: 'Contact', icon: <FaEnvelope /> },
 ];
 
-// MODIFIED: This component no longer needs dark mode props
 const FloatingIsland = () => { 
   const location = useLocation();
   const currentPath = location.pathname;
 
+  // 1. ADD THIS HANDLER
+  // This function will be called every time a link is clicked.
+  const handleLinkClick = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
+  // This (optional) effect handles browser back/forward buttons,
+  // but the onClick handler above is the main fix.
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [currentPath]);
+
   return (
-    // REMOVED: className no longer needs dark/light logic
     <nav
       className="floating-island" 
       aria-label="Main page navigation"
@@ -38,6 +48,8 @@ const FloatingIsland = () => {
               to={route.path}
               className={currentPath === route.path ? 'active' : ''}
               aria-label={`Maps to ${route.label} page`}
+              // 2. ADD THE onClick PROP HERE
+              onClick={handleLinkClick}
             >
               <span className="nav-icon">{route.icon}</span>
               <span className="nav-tooltip">{route.label}</span>
@@ -45,9 +57,6 @@ const FloatingIsland = () => {
           </li>
         ))}
       </ul>
-
-      {/* REMOVED: The entire <button> for dark mode toggle is gone */}
-      
     </nav>
   );
 };
