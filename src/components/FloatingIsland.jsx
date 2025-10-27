@@ -1,7 +1,6 @@
-// src/components/FloatingIsland.jsx (Updated)
-
-import React, { useEffect } from 'react'; 
-import { Link, useLocation } from 'react-router-dom';
+// src/components/FloatingIsland.jsx
+import React from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   FaHome, 
   FaUser, 
@@ -19,41 +18,43 @@ const routes = [
   { path: '/contact', label: 'Contact', icon: <FaEnvelope /> },
 ];
 
-const FloatingIsland = () => { 
+const FloatingIsland = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const currentPath = location.pathname;
 
-  // 1. ADD THIS HANDLER
-  // This function will be called every time a link is clicked.
-  const handleLinkClick = () => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  // ✅ Navigate + Smooth scroll after DOM is ready
+  const handleIconClick = (path) => {
+    if (currentPath === path) {
+      // Already on the same page → just scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      // Navigate first
+      navigate(path);
+      // Smooth scroll after small delay (ensures DOM update)
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
   };
-
-  // This (optional) effect handles browser back/forward buttons,
-  // but the onClick handler above is the main fix.
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, [currentPath]);
 
   return (
     <nav
-      className="floating-island" 
+      className="floating-island"
       aria-label="Main page navigation"
       role="navigation"
     >
       <ul>
         {routes.map((route) => (
           <li key={route.path}>
-            <Link
-              to={route.path}
-              className={currentPath === route.path ? 'active' : ''}
-              aria-label={`Maps to ${route.label} page`}
-              // 2. ADD THE onClick PROP HERE
-              onClick={handleLinkClick}
+            <button
+              onClick={() => handleIconClick(route.path)}
+              className={`nav-btn ${currentPath === route.path ? 'active' : ''}`}
+              aria-label={`Navigate to ${route.label} page`}
             >
               <span className="nav-icon">{route.icon}</span>
               <span className="nav-tooltip">{route.label}</span>
-            </Link>
+            </button>
           </li>
         ))}
       </ul>
