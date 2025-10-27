@@ -1,6 +1,8 @@
 import React from 'react';
-// Import icons
-import { SiVercel, SiReact } from 'react-icons/si';
+import { SiVercel, SiReact, SiVite } from 'react-icons/si';
+
+// Import the CSS that defines the '.pill' class if not imported globally
+// import '../components/styles/projects.css'; 
 
 const Footer = () => {
   return (
@@ -10,30 +12,34 @@ const Footer = () => {
         {/* Call to action */}
         <div>
           <h3 className="text-white text-xl font-semibold mb-2">Let’s build something great</h3>
+          <br/>
           <p className="text-sm text-gray-400">Open to freelance, collaborations & full-time roles</p>
         </div>
-        
+        <br/>
         {/* Divider */}
         <div className="w-full h-px bg-white/10"></div>
 
         {/* Copyright and Credits */}
-        <p className="text-xs text-gray-500 flex flex-col sm:flex-row sm:flex-wrap items-center justify-center sm:gap-x-4 gap-y-2">
- 
-          {/* Divider for larger screens */}
-          <span className="hidden sm:inline">|</span>
+        <div className="text-xs flex flex-col items-center justify-center gap-y-4">
+          {/* Pills container */}
+          <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+            
+            {/* Created with React & Vite - Uses .pill class */}
+            <span className="pill">
+              <span>Created with</span>
+              {/* Icons keep their brand color */}
+              <SiReact className="text-[#61DAFB]" title="React" />
+              <span>&</span>
+              <SiVite className="text-[#646CFF]" title="Vite" />
+            </span>
+            <span className="opacity-0">|||||</span>
+            <span className="pill">
+              <span>Deployed with</span>
+              <SiVercel className="text-white" title="Vercel" />
+            </span>
 
-          <span className="flex items-center gap-1.5">
-            <span>Created with</span>
-          </span>
-          <span className="flex items-center gap-5.5">
-            <SiReact className="text-[#61DAFB]" title="React" />
-            <span>React</span>
-            <span className="opacity-0 sm:inline">||||||||||||</span>
-            <SiVercel className="text-white" title="Vercel" />
-            <span>Vercel</span>
-          </span>
-        </p>
-
+          </div>
+        </div>
       </div>
     </footer>
   );
