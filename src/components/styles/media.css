@@ -347,3 +347,97 @@ html, body {
 .thumb-loaded {
   opacity: 1;
 }
+/* FIX 1: Gradient style for Hero Title */
+    .hero-gradient-title {
+      background: linear-gradient(90deg, #22c55e, #a3e635);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      /* Inherit other h1 styles from media.css */
+      font-size: inherit;
+      font-weight: inherit;
+      margin: inherit;
+    }
+
+    /* --- Lightbox Styles --- */
+    .lightbox-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      opacity: 0;
+      animation: fadeIn 0.3s ease forwards;
+    }
+    .lightbox-content {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      transform: scale(0.9);
+      animation: zoomIn 0.3s 0.1s ease forwards;
+    }
+    
+    /* FIX 2: Lightbox image sizing.
+      This ensures the image scales down to fit the viewport.
+    */
+    .lightbox-image {
+      display: block;
+      /* Set max-width/height to fill *up to* the viewport */
+      max-width: 90vw;
+      max-height: 85vh; /* 85% leaves room for caption */
+      
+      /* Let the browser auto-calculate width/height to maintain ratio */
+      width: auto;
+      height: auto;
+      
+      object-fit: contain;
+      border-radius: 8px;
+    }
+
+    .lightbox-caption {
+      text-align: center;
+      color: #fff;
+      padding-top: 15px;
+    }
+    .lightbox-caption h3 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+    .lightbox-caption p {
+      margin: 0;
+      color: #ccc;
+    }
+    .lightbox-close-btn {
+      position: absolute;
+      top: -10px; /* Position relative to the content */
+      right: -10px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: 200;
+      line-height: 38px;
+      text-align: center;
+      cursor: pointer;
+      z-index: 10000;
+      transition: all 0.2s ease;
+    }
+    .lightbox-close-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes zoomIn {
+      to { opacity: 1; transform: scale(1); }
+    }

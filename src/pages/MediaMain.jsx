@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import '../components/styles/media.css'; // Ensure this path is correct
 
 // --- Data ---
@@ -28,27 +28,56 @@ const filterCategories = [
 ];
 
 
+// --- Sub-component: Lightbox ---
+
+const Lightbox = ({ item, onClose }) => {
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="lightbox-backdrop" onClick={onClose}>
+      <button className="lightbox-close-btn" aria-label="Close image view">&times;</button>
+      <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+        <img src={item.img} alt={item.title} className="lightbox-image" />
+        <div className="lightbox-caption">
+          <h3>{item.title}</h3>
+          <p className="capitalize">{item.type}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+
 // --- Sub-component: MediaHero ---
 
 const MediaHero = () => (
   <div className="page-hero-container">
     <div className="hero-section">
-      {/* Matrix Background */}
-      <div className="matrix-container absolute inset-0 z-0 pointer-events-none">
+      <div className="matrix-container">
         <div className="matrix-pattern">
           {[...Array(28)].map((_, idx) => (
             <div key={idx} className="matrix-column"></div>
           ))}
         </div>
       </div>
-      {/* Overlay for contrast */}
       <div className="hero-bg-overlay" />
-      {/* Hero Content */}
-      <div className="hero-content">
-        <h1 className="text-4xl lg:text-5xl font-bold text-white mb-3">
+      
+      {/* FIX: Added `hero-gradient-title` class to H1.
+        Kept zIndex style to ensure content is above the overlay.
+      */}
+      <div className="hero-content" style={{ position: 'relative', zIndex: 20 }}>
+        <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">
           Media & Gallery
         </h1>
-        <p className="text-lg lg:text-xl text-gray-300">
+        <p>
           A collection of my creative work.
         </p>
       </div>
@@ -78,7 +107,7 @@ const MediaCategories = ({ categories, activeFilter, onFilterChange, filtering }
 
 // --- Sub-component: MediaCards ---
 
-const MediaCards = ({ items, activeFilter, filtering }) => {
+const MediaCards = ({ items, activeFilter, filtering, onImageSelect }) => {
   const [loadedImages, setLoadedImages] = useState({});
   const handleImageLoad = (id) => {
     setLoadedImages((prev) => ({ ...prev, [id]: true }));
@@ -88,13 +117,7 @@ const MediaCards = ({ items, activeFilter, filtering }) => {
     <div className="gallery-grid">
       {items.map((item, index) => {
         const show = activeFilter === 'all' || item.type === activeFilter;
-        
-        // This logic fixes the reflow issue:
-        // 1. If an item should be shown, it's 'flex'.
-        // 2. If an item is hidden, but we are *animating*, it's 'flex' (so the fade-out plays).
-        // 3. If an item is hidden, and we are *not* animating, it's 'none' (so the grid reflows).
         const displayStyle = show || filtering ? 'flex' : 'none';
-
         const style = {
           '--delay': `${index * 0.055}s`,
           display: displayStyle,
@@ -107,6 +130,10 @@ const MediaCards = ({ items, activeFilter, filtering }) => {
             aria-hidden={!show ? "true" : "false"}
             style={style}
             className="gallery-item"
+            onClick={() => onImageSelect(item)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onImageSelect(item)}
           >
             <div className="thumb-frame">
               <img
@@ -116,7 +143,8 @@ const MediaCards = ({ items, activeFilter, filtering }) => {
                 onLoad={() => handleImageLoad(item.id)}
                 loading="lazy"
               />
-              <div className="thumb-meta">
+              {/* Overlay text is hidden as requested */}
+              <div className="thumb-meta" style={{ display: 'none' }}>
                 <h3 className="thumb-title">{item.title}</h3>
                 <p className="capitalize">{item.type}</p>
               </div>
@@ -135,27 +163,19 @@ const MediaMain = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [isFiltering, setIsFiltering] = useState(false);
   const timeoutRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFilterChange = (newFilter) => {
-    // Prevent re-filtering if the button is spammed or the same filter is chosen
     if (activeFilter === newFilter || isFiltering) return;
-
-    // 1. Start the filtering animation state and set the new filter
     setIsFiltering(true);
     setActiveFilter(newFilter);
-    // This re-renders MediaCards, applying [aria-hidden="true"] to items that will
-    // be hidden. They start their 500ms fade-out animation but remain in the grid.
 
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    // 2. After the CSS animation (500ms) finishes, stop the filtering state
     timeoutRef.current = setTimeout(() => {
       setIsFiltering(false);
-      // This triggers a final re-render. MediaCards now sees isFiltering=false,
-      // and the hidden items get 'display: none', allowing the grid to reflow.
-    }, 500); // This MUST match the transition time in your .gallery-item[aria-hidden="true"] CSS
+    }, 500);
   };
-
   return (
     <>
       <main id="main-content">
@@ -171,9 +191,17 @@ const MediaMain = () => {
             items={allGalleryItems}
             activeFilter={activeFilter}
             filtering={isFiltering}
+            onImageSelect={setSelectedImage} 
           />
         </div>
       </main>
+      
+      {selectedImage && (
+        <Lightbox 
+          item={selectedImage} 
+          onClose={() => setSelectedImage(null)} 
+        />
+      )}
     </>
   );
 };
