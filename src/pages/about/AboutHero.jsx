@@ -19,8 +19,8 @@ const AboutHero = () => {
         </div>
       </div>
       
-      {/* Glass overlay */}
-      <div className="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm" aria-hidden="true"></div>
+      {/* Overlay for contrast */}
+      <div className="hero-bg-overlay" />
       
       {/* Inner content */}
       <div className="hero-about-inner text-center flex flex-col items-center justify-center relative z-10">

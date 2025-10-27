@@ -28,8 +28,8 @@ const ContactHero = () => {
            <div class="matrix-column"></div><div class="matrix-column"></div>
           </div> 
         </div> 
-        <div class="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm">
-        </div> 
+        {/* Overlay for contrast */}
+      <div className="hero-bg-overlay" />
       <div className="hero-inner text-center flex flex-col items-center justify-center relative z-10">
         <h1 className="hero-title text-4xl sm:text-5xl font-extrabold mb-4">Get in touch</h1>
         <p className="hero-content text-base sm:text-lg max-w-2xl leading-relaxed text-gray-200">

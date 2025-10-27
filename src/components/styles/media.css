@@ -83,14 +83,19 @@ html, body {
   50% { filter: blur(1.2px) brightness(1.6) }
 }
 
-/* Overlay for text readability */
+/* Overlay for text readability - MODIFIED for "Smoked Glass" effect */
 .hero-bg-overlay {
-  background: rgba(13,17,23,0.82);
+  /* 1. "Smoked" color tint: A dark, semi-transparent black. */
+  background: rgb(0, 28, 6); 
+  
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
   z-index: 10;
   pointer-events: none;
-  backdrop-filter: blur(1.2px);
+
+  /* 2. "Smoked Glass" filter: Increased blur + desaturation/darkening. */
+  backdrop-filter: blur(10px) saturate(0.7) brightness(0.9);
+  -webkit-backdrop-filter: blur(10px) saturate(0.7) brightness(0.9);
 }
 
 /*----------------------------------------------

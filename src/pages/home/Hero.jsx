@@ -93,8 +93,8 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Glass overlay */}
-      <div className="absolute inset-0 z-10 bg-black/60 backdrop-blur-sm" aria-hidden="true"></div>
+      {/* Overlay for contrast */}
+      <div className="hero-bg-overlay" />
 
       {/* ----- MODIFIED MAIN CONTENT CONTAINER ----- */}
       {/* Replaced responsive px with px-[10%] for 10% padding on left/right */}
