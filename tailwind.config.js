@@ -98,20 +98,22 @@ export default {
     require('@tailwindcss/aspect-ratio'),
     require('@tailwindcss/container-queries'),
 
-    // 🌟 Enhanced Custom Scroll Plugin
+    // 🌟 Enhanced Custom Scroll Plugin (revised)
     plugin(function ({ addUtilities, addComponents, theme }) {
       // -----------------------------
-      // 1️⃣ Scroll + Overflow Resets
+      // 1️⃣ Scroll + Overflow Resets (tamed)
       // -----------------------------
       addUtilities({
         '.scroll-top': {
+          // keep user scroll smooth but avoid forcing aggressive behavior that breaks programmatic scroll
           'scroll-behavior': 'smooth',
           'scroll-padding-top': '0',
-          'overscroll-behavior': 'none',
-          'overflow-anchor': 'none', // Prevent element jumping
+          // removed 'overscroll-behavior: none' and 'overflow-anchor: none' to avoid interfering with scroll resets
         },
         '.scroll-container': {
-          '@apply w-full min-h-screen overflow-y-auto scroll-smooth': {},
+          // use explicit h-screen so this becomes the viewport-sized scroll container
+          // (min-h-screen can sometimes prevent overflow from appearing when combined with child heights)
+          '@apply w-full h-screen overflow-y-auto scroll-smooth': {},
         },
         '.no-scroll-memory': {
           'scroll-margin': '0 !important',
@@ -133,7 +135,8 @@ export default {
       // -----------------------------
       addComponents({
         '.page-wrapper': {
-          '@apply scroll-container scroll-top bg-surface-dark-900 text-brand-green-400 flex flex-col min-h-screen transition-opacity duration-300': {},
+          // use scroll-container (h-screen + overflow-y-auto). Removed min-h-screen to avoid accidental double-scrolling.
+          '@apply scroll-container scroll-top bg-surface-dark-900 text-brand-green-400 flex flex-col transition-opacity duration-300': {},
         },
         '.btn-glow': {
           '@apply py-3 px-6 rounded-lg text-white font-bold transition duration-300': {},
