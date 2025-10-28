@@ -80,7 +80,7 @@ const MediaHero = () => (
         <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">
           Media & Gallery
         </h1>
-        <p>
+        <p className="text-justify max-w-2xl lg:max-w-3xl space-y-4 mt-6">
           A collection of my creative work.
         </p>
       </div>

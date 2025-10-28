@@ -25,7 +25,7 @@ const ProjectHero = () => {
       {/* Inner content */}
       <div className="hero-inner text-center flex flex-col items-center justify-center relative z-10">
         <h1 className="hero-about-title text-4xl sm:text-5xl font-extrabold mb-4">Projects</h1>
-        <p className="hero-content max-w-2xl mx-auto mb-6">
+        <p className="hero-content text-justify max-w-2xl lg:max-w-3xl space-y-4 mt-6">
           Explore the wide range of dynamic projects I've built — from Android apps to full-stack platforms — leveraging
           <strong> React</strong>, <strong>TypeScript</strong>, <strong>Express</strong>, <strong>Python</strong>,
           <strong> AI</strong>, <strong>Firebase</strong>, and more. Each project reflects my passion for solving real-world problems and crafting seamless user experiences.
