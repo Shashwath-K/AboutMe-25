@@ -1,14 +1,16 @@
 import React from 'react';
 import RevealOnScroll from './RevealOnScroll';
-
 const ExperienceCard = ({ title, company, period, description }) => {
   return (
-    // RevealOnScroll wraps the card and handles the animation
     <RevealOnScroll>
-      <div className="experience-card glass">
-        <h3>{title}</h3>
-        <p className="text-sm text-gray-400 mb-3">{company} — {period}</p>
-        <p dangerouslySetInnerHTML={{ __html: description }} />
+      <div className="timeline-item">
+        <div className="timeline-card glass shadow-xl">
+          <h3>{title}</h3>
+          <p className="subtitle">{company}</p>
+          <p className="description" dangerouslySetInnerHTML={{ __html: description }} />
+          <p className="period">{period}</p>
+          
+        </div>
       </div>
     </RevealOnScroll>
   );

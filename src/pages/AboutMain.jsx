@@ -1,34 +1,33 @@
 import React, { useEffect } from 'react';
 import Footer from '../components/Footer';
 import AboutHero from './about/AboutHero.jsx';
-import SkillCard from './about/SkillCard.jsx';
+import EducationCard from './about/EducationCard.jsx';
 import ExperienceCard from './about/ExperienceCard.jsx';
 import RevealOnScroll from './about/RevealOnScroll.jsx';
 import '../components/styles/About.css';
 
-import {
-  DiReact,
-  DiNodejsSmall,
-  DiJava,
-  DiPython,
-  DiFirebase,
-} from 'react-icons/di';
-import {
-  SiTypescript,
-  SiExpress,
-  SiFlutter
-} from 'react-icons/si';
-
-// Skills Data
-const skillsData = [
-  { name: 'React', icon: <DiReact /> },
-  { name: 'TypeScript', icon: <SiTypescript /> },
-  { name: 'Node.js', icon: <DiNodejsSmall /> },
-  { name: 'Express', icon: <SiExpress /> },
-  { name: 'Java', icon: <DiJava /> },
-  { name: 'Python', icon: <DiPython /> },
-  { name: 'Firebase', icon: <DiFirebase /> },
-  { name: 'Flutter', icon: <SiFlutter /> },
+const educationData = [
+  {
+    degree: 'Bachelor of Engineering',
+    institution: 'KVG College of Engineering',
+    university: 'Visvesvaraya Technological University',
+    period: '2022 - 2025', 
+    details: 'Computer Science & Engineering',
+  },
+  {
+    degree: 'Diploma in Computer Science',
+    institution: 'KVG Polytechnic College',
+    university: 'Board of Technical Examinations, Karnataka',
+    period: '2019 - 2022',
+    details: 'Specialized in Software Development',
+  },
+  {
+    degree: 'Pre University Course',
+    institution: 'Vidyanikethan PU College',
+    university: 'Karnataka PU Board',
+    period: '2017 - 2019',
+    details: 'PCMB Stream',
+  },
 ];
 
 // Experience Data
@@ -92,7 +91,8 @@ const About = () => {
         <section className="section-about px-6 py-20 bg-[#0e0e14]">
           <div className="max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
-            <div className="experience-wrapper">
+            {/* Use the generic timeline wrapper class */}
+            <div className="timeline-wrapper">
               {experienceData.map((job) => (
                 <ExperienceCard
                   key={job.title}
@@ -106,18 +106,25 @@ const About = () => {
           </div>
         </section>
 
-        {/* SKILLS */}
+        {/* EDUCATION */}
         <section className="section-about px-6 py-20 bg-[#0b0b10]">
           <div className="max-w-6xl mx-auto">
-            <h2 className="text-3xl font-bold text-center mb-10">Technical Skills</h2>
-            <div className="skills-grid">
-              {skillsData.map((skill) => (
-                <SkillCard key={skill.name} name={skill.name} icon={skill.icon} />
+            <h2 className="text-3xl font-bold text-center mb-16">Education Timeline</h2>
+            {/* Use the generic timeline wrapper class */}
+            <div className="timeline-wrapper">
+              {educationData.map((edu) => (
+                <EducationCard
+                  key={edu.institution}
+                  degree={edu.degree}
+                  institution={edu.institution}
+                  university={edu.university}
+                  period={edu.period}
+                  details={edu.details}
+                />
               ))}
             </div>
           </div>
         </section>
-
       </main>
       <Footer />
     </div>
