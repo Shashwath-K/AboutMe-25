@@ -6,30 +6,59 @@ import WhatIDo from './home/WhatIDo';
 // Lazy load heavy components for performance
 const Stacks = lazy(() => import('./home/Stacks'));
 const DevStats = lazy(() => import('./home/DevStats'));
-import '../components/styles/styles.css'; 
+import '../components/styles/styles.css';
 
 const HomeMain = () => {
-  // Dark mode toggle state initialization
   const [darkMode, setDarkMode] = useState(false);
-
-  // Scroll to top button display state
   const [showTopBtn, setShowTopBtn] = useState(false);
 
-  // Smooth scroll on mount
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Prefer the .page-wrapper scroll container (App sets this) otherwise fallback to window
+    const scrollContainer = document.querySelector('.page-wrapper') || window;
 
+    // Scroll to top of the actual container on mount (instant)
+    try {
+      if (scrollContainer === window) {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      } else if (typeof scrollContainer.scrollTo === 'function') {
+        scrollContainer.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      } else {
+        scrollContainer.scrollTop = 0;
+      }
+    } catch (e) {
+      // fallback
+      window.scrollTo(0, 0);
+    }
+
+    // Handler that checks the correct scroll position for whichever container is being used
     const handleScroll = () => {
-      setShowTopBtn(window.scrollY > 300);
+      try {
+        const y = scrollContainer === window ? window.scrollY : scrollContainer.scrollTop;
+        setShowTopBtn(y > 300);
+      } catch (err) {
+        setShowTopBtn(false);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    // Use capture true to hear scrolls from nested elements if needed
+    if (scrollContainer === window) {
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    } else {
+      scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    }
+
+    // cleanup
+    return () => {
+      if (scrollContainer === window) {
+        window.removeEventListener('scroll', handleScroll);
+      } else {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      }
+    };
   }, []);
 
-  // Dark mode toggle handler
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    setDarkMode(prev => !prev);
     document.body.classList.toggle('dark', !darkMode);
     document.body.classList.toggle('light', darkMode);
   };
@@ -37,30 +66,39 @@ const HomeMain = () => {
   return (
     <>
       <Helmet>
-        {/* ... (all your helmet content remains the same) ... */}
+        {/* ...keep your helmet contents... */}
       </Helmet>
-      <main
+
+      {/* 
+        Use a div here (not <main>) because App already renders the main.page-wrapper.
+        Make this a flex-grow container so the footer sits inside the same flow.
+      */}
+      <div
         id="main-content"
-        className={darkMode ? 'dark' : 'light'}
+        className={`flex-1 ${darkMode ? 'dark' : 'light'}`}
         role="main"
         aria-label="Home page main content"
+        /* optional inline: ensure no nested independent scroll unless desired */
       >
-        {/* ADD 'id' ATTRIBUTES TO YOUR SECTIONS */}
         <section id="home" aria-labelledby="hero-title">
           <Hero />
         </section>
+
         <section id="what-i-do" aria-labelledby="whatido-title">
           <WhatIDo />
         </section>
+
         <Suspense fallback={<div>Loading skills and toolkit...</div>}>
           <section id="skills" aria-labelledby="skills-title">
             <Stacks />
           </section>
+
           <section id="stats" aria-labelledby="devstats-title">
             <DevStats />
           </section>
         </Suspense>
-      </main>
+      </div>
+
       <Footer darkMode={darkMode} />
     </>
   );
