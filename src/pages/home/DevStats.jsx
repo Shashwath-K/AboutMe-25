@@ -22,7 +22,7 @@ const WAKATIME_URL = 'https://wakatime.com/share/@ShashwathK/0942d213-cb36-417f-
 // 4. CHANGED: Updated Twitter to X
 const socials = [
   { name: "GitHub", link: "https://github.com/Shashwath-K", icon: <SiGithub />, class: "social__btn--github" },
-  { name: "LinkedIn", link: "https://www.linkedin.com/in/shashwath-kukkunoor-2b4277225/", icon: <SiLinkedin />, class: "social__btn--linkedin" },
+  { name: "LinkedIn", link: "https://www.linkedin.com/in/shashwath-k-s-2b4277225/", icon: <SiLinkedin />, class: "social__btn--linkedin" },
   { name: "X", link: "https://x.com/shashwath_k15", icon: <SiX />, class: "social__btn--x" }, // CHANGED
   { name: "Instagram", link: "https://www.instagram.com/shashwath_kukku?igsh=cXprb2JnMGRqMmZu", icon: <SiInstagram />, class: "social__btn--instagram" },
   { name: "Spotify", link: "https://open.spotify.com/user/31omectxpm23tbqslxwj5b24a5qa", icon: <SiSpotify />, class: "social__btn--spotify" },
