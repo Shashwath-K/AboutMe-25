@@ -4,9 +4,11 @@ import ProjectHero from './projects/ProjectHero';
 import ProjectCard from './projects/ProjectCard';
 import '../components/styles/styles.css';
 import '../components/styles/projects.css'; 
-import placholderImage from '../assets/Projects/project1.gif';
+import eventwhiz from '../assets/Projects/eventwhiz.png'
+import skillspherelogo from '../assets/Projects/skillsphere.png'
+import licenseLogo from '../assets/Projects/license_plate.png'
 
-// 1. IMPORTED REACT ICONS
+
 import {
   DiAndroid, DiJava, DiReact, 
   DiNodejsSmall, DiFirebase, DiPython
@@ -15,7 +17,6 @@ import {
   SiExpress, SiTailwindcss, SiOpencv, SiTypescript, SiDjango
 } from 'react-icons/si';
 
-// 2. UPDATED a (SkillSphere-CAT) to use your known data
 const projectsData = [
   {
     title: "EventWhiz — Event Manager Android App",
@@ -24,7 +25,7 @@ const projectsData = [
       { name: "Android", icon: <DiAndroid /> }, 
       { name: "Java", icon: <DiJava /> }        
     ],
-    imageUrl: placholderImage,
+    imageUrl: eventwhiz,
     altText: "EventWhiz App GIF",
     githubUrl: "https://github.com/Shashwath-K/EventWhiz_EventApp"
   },
@@ -39,7 +40,7 @@ const projectsData = [
       { name: "Firebase", icon: <DiFirebase /> },     
       { name: "Tailwind", icon: <SiTailwindcss /> }   
     ],
-    imageUrl: placholderImage,
+    imageUrl: skillspherelogo,
     altText: "SkillSphere-CAT Platform GIF",
     githubUrl: "https://github.com/Shashwath-K/SkillSphere-CAT"
   },
@@ -51,7 +52,7 @@ const projectsData = [
       { name: "OpenCV", icon: <SiOpencv /> },    
       { name: "Django", icon: <SiDjango /> }      
     ],
-    imageUrl: placholderImage,
+    imageUrl: licenseLogo,
     altText: "License Plate Detection GIF",
     githubUrl: "https://github.com/Shashwath-K/License_Plate_detection_and_toll_collection"
   }
