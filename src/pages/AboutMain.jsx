@@ -17,48 +17,17 @@ import {
 } from 'react-icons/fa';
 import '../components/styles/About.css';
 
-// SVG Circle competency indicator
-const CompetencyCircle = ({ label, percentage }) => {
-  const radius = 26;
-  const strokeWidth = 4;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (percentage / 100) * circumference;
-
+// Competency indicator progress bar
+const CompetencyRow = ({ label, percentage }) => {
   return (
-    <div className="flex flex-col items-center p-4 glass border border-green-500/10 rounded-xl relative overflow-hidden group">
-      <svg className="w-16 h-16 transform -rotate-90">
-        {/* Background circle */}
-        <circle
-          cx="32"
-          cy="32"
-          r={radius}
-          className="stroke-neutral-800"
-          strokeWidth={strokeWidth}
-          fill="transparent"
-        />
-        {/* Foreground circle with neon glow */}
-        <circle
-          cx="32"
-          cy="32"
-          r={radius}
-          stroke="url(#neon-green-grad-about)"
-          strokeWidth={strokeWidth}
-          fill="transparent"
-          strokeDasharray={circumference}
-          strokeDashoffset={strokeDashoffset}
-          strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-          style={{ filter: "drop-shadow(0px 0px 4px #00ff99)" }}
-        />
-        <defs>
-          <linearGradient id="neon-green-grad-about" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00ff99" />
-            <stop offset="100%" stopColor="#00ff33" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <span className="absolute top-[24px] text-[0.75rem] font-mono text-white font-bold">{percentage}%</span>
-      <span className="mt-2 text-[0.7rem] font-mono text-gray-400 text-center tracking-wide uppercase">{label}</span>
+    <div className="hud-metric-row">
+      <div className="hud-metric-header font-mono text-[10px] sm:text-xs">
+        <span className="hud-metric-label text-gray-300">{label}</span>
+        <span className="hud-metric-value font-bold">{percentage}%</span>
+      </div>
+      <div className="hud-metric-track">
+        <div className="hud-metric-fill" style={{ width: `${percentage}%` }}></div>
+      </div>
     </div>
   );
 };
@@ -70,15 +39,18 @@ const TerminalConsole = () => {
   const commandText = "cat profile.json";
 
   useEffect(() => {
+    let currentText = "";
     let index = 0;
     const interval = setInterval(() => {
-      setTypedText((prev) => prev + commandText[index]);
-      index++;
-      if (index === commandText.length) {
+      if (index < commandText.length) {
+        currentText += commandText.charAt(index);
+        setTypedText(currentText);
+        index++;
+      } else {
         clearInterval(interval);
         setTimeout(() => setShowOutput(true), 600);
       }
-    }, 70);
+    }, 75);
 
     return () => clearInterval(interval);
   }, []);
@@ -86,15 +58,18 @@ const TerminalConsole = () => {
   const handleReRun = () => {
     setTypedText("");
     setShowOutput(false);
+    let currentText = "";
     let index = 0;
     const interval = setInterval(() => {
-      setTypedText((prev) => prev + commandText[index]);
-      index++;
-      if (index === commandText.length) {
+      if (index < commandText.length) {
+        currentText += commandText.charAt(index);
+        setTypedText(currentText);
+        index++;
+      } else {
         clearInterval(interval);
         setTimeout(() => setShowOutput(true), 600);
       }
-    }, 70);
+    }, 75);
   };
 
   return (
@@ -105,8 +80,8 @@ const TerminalConsole = () => {
           <div className="terminal-dot terminal-dot-yellow"></div>
           <div className="terminal-dot terminal-dot-green"></div>
         </div>
-        <div className="terminal-title">bash - guest@shashwath</div>
-        <button className="terminal-action-btn" onClick={handleReRun}>
+        <div className="terminal-title font-mono text-[10px] sm:text-xs">bash - guest@shashwath</div>
+        <button className="terminal-action-btn font-mono" onClick={handleReRun}>
           Re-run
         </button>
       </div>
@@ -174,14 +149,14 @@ const About = () => {
                   <span>SYSTEMS: ONLINE</span>
                 </div>
 
-                {/* Focus Radial Metrics */}
-                <div className="mt-8">
-                  <h3 className="text-left font-mono text-xs text-gray-500 uppercase tracking-widest mb-4">Focus Allocation</h3>
-                  <div className="grid grid-cols-2 gap-3">
-                    <CompetencyCircle label="AI & ML" percentage={85} />
-                    <CompetencyCircle label="Full-Stack" percentage={90} />
-                    <CompetencyCircle label="Mobile App" percentage={85} />
-                    <CompetencyCircle label="DevSecOps" percentage={80} />
+                {/* Focus Allocation Metrics */}
+                <div className="mt-8 text-left">
+                  <h3 className="font-mono text-xs text-gray-500 uppercase tracking-widest mb-4">Focus Allocation</h3>
+                  <div className="hud-metrics-container">
+                    <CompetencyRow label="AI & Machine Learning" percentage={85} />
+                    <CompetencyRow label="Full-Stack Web Architectures" percentage={90} />
+                    <CompetencyRow label="Mobile App Engineering" percentage={85} />
+                    <CompetencyRow label="DevSecOps & Databases" percentage={80} />
                   </div>
                 </div>
 
