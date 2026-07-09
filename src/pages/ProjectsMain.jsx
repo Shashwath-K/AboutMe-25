@@ -1,83 +1,76 @@
-import React from 'react';
-import Footer from '../components/Footer'; // Placeholder
+import React, { useEffect } from 'react';
+import Footer from '../components/Footer'; 
 import ProjectHero from './projects/ProjectHero';
 import ProjectCard from './projects/ProjectCard';
+import { projects } from '../data/portfolioData';
 import '../components/styles/styles.css';
 import '../components/styles/projects.css'; 
-import eventwhiz from '../assets/Projects/eventwhiz.png'
-import skillspherelogo from '../assets/Projects/skillsphere.png'
-import licenseLogo from '../assets/Projects/license_plate.png'
-
 
 import {
   DiAndroid, DiJava, DiReact, 
   DiNodejsSmall, DiFirebase, DiPython
 } from 'react-icons/di';
 import {
-  SiExpress, SiTailwindcss, SiOpencv, SiTypescript, SiDjango
+  SiExpress, SiTailwindcss, SiOpencv, SiTypescript, SiDjango,
+  SiFlutter, SiDart, SiAndroidstudio, SiFramer, SiGoogle
 } from 'react-icons/si';
+import { FaFileCsv, FaDatabase, FaChartBar } from 'react-icons/fa';
 
-const projectsData = [
-  {
-    title: "EventWhiz — Event Manager Android App",
-    description: "EventWhiz is a powerful event management app built for Android, enabling seamless creation, tracking, and management of events. Designed with simplicity and usability in mind.",
-    techStack: [
-      { name: "Android", icon: <DiAndroid /> }, 
-      { name: "Java", icon: <DiJava /> }        
-    ],
-    imageUrl: eventwhiz,
-    altText: "EventWhiz App GIF",
-    githubUrl: "https://github.com/Shashwath-K/EventWhiz_EventApp"
-  },
-  {
-    title: "SkillSphere-CAT — Online Learning Platform",
-    description: "SkillSphere-CAT is a full-fledged online learning platform built with React, TypeScript, and Express. It integrates Gemini AI for automatic course and quiz generation, and uses Firebase for authentication and storage.",
-    techStack: [
-      { name: "React", icon: <DiReact /> },          
-      { name: "TypeScript", icon: <SiTypescript /> },   
-      { name: "Node.js", icon: <DiNodejsSmall /> },   
-      { name: "Express", icon: <SiExpress /> },       
-      { name: "Firebase", icon: <DiFirebase /> },     
-      { name: "Tailwind", icon: <SiTailwindcss /> }   
-    ],
-    imageUrl: skillspherelogo,
-    altText: "SkillSphere-CAT Platform GIF",
-    githubUrl: "https://github.com/Shashwath-K/SkillSphere-CAT"
-  },
-  {
-    title: "License Plate Detection & Toll Collection",
-    description: "A computer vision-based project that detects license plates using Python and OpenCV. It extracts text with OCR, and evolved from a desktop program into a fully functional web application with toll collection simulation.",
-    techStack: [
-      { name: "Python", icon: <DiPython /> },    
-      { name: "OpenCV", icon: <SiOpencv /> },    
-      { name: "Django", icon: <SiDjango /> }      
-    ],
-    imageUrl: licenseLogo,
-    altText: "License Plate Detection GIF",
-    githubUrl: "https://github.com/Shashwath-K/License_Plate_detection_and_toll_collection"
-  }
-];
+const iconMap = {
+  'React': <DiReact />,
+  'TypeScript': <SiTypescript />,
+  'Express': <SiExpress />,
+  'Firebase': <DiFirebase />,
+  'Gemini AI': <SiGoogle />,
+  'Tailwind CSS': <SiTailwindcss />,
+  'Framer Motion': <SiFramer />,
+  'Android': <DiAndroid />,
+  'Java': <DiJava />,
+  'Flutter': <SiFlutter />,
+  'Dart': <SiDart />,
+  'Android Studio': <SiAndroidstudio />,
+  'Python': <DiPython />,
+  'OpenCV': <SiOpencv />,
+  'Django': <SiDjango />,
+  'Power BI': <FaChartBar />,
+  'CSV': <FaFileCsv />,
+  'Data Modeling': <FaDatabase />,
+  'Node.js': <DiNodejsSmall />,
+  'Database': <FaDatabase />
+};
 
 const ProjectsMain = () => {
+  // Ensure scroll-to-top on load
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   return (
-    // Note: Converted body to div, assuming App.js handles main body tags
     <div className="bg-black text-white font-inter">
       <main id="main-content" className="min-h-screen">
         {/* Hero Section */}
         <ProjectHero />
         {/* Projects Section */}
         <div id="projects-container" className="projects-section">
-          {projectsData.map((project, index) => (
-            <ProjectCard
-              key={index}
-              title={project.title}
-              description={project.description}
-              techStack={project.techStack}
-              imageUrl={project.imageUrl}
-              altText={project.altText}
-              githubUrl={project.githubUrl}
-            />
-          ))}
+          {projects.map((project, index) => {
+            // Map tech strings to the structured components expected by ProjectCard
+            const techStack = project.technologies.map(tech => ({
+              name: tech,
+              icon: iconMap[tech] || <DiReact />
+            }));
+
+            return (
+              <ProjectCard
+                key={index}
+                title={project.name}
+                description={project.description}
+                techStack={techStack}
+                imageUrl={project.image}
+                altText={project.name}
+                githubUrl={project.github}
+              />
+            );
+          })}
         </div>
       </main>
 

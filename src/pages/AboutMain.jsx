@@ -4,55 +4,27 @@ import AboutHero from './about/AboutHero.jsx';
 import EducationCard from './about/EducationCard.jsx';
 import ExperienceCard from './about/ExperienceCard.jsx';
 import RevealOnScroll from './about/RevealOnScroll.jsx';
+import { experience, education, achievements, certifications, profile } from '../data/portfolioData';
 import '../components/styles/About.css';
 
-const educationData = [
-  {
-    degree: 'Bachelor of Engineering',
-    institution: 'KVG College of Engineering',
-    university: 'Visvesvaraya Technological University',
-    period: '2022 - 2025', 
-    details: 'Computer Science & Engineering',
-  },
-  {
-    degree: 'Diploma in Computer Science',
-    institution: 'KVG Polytechnic College',
-    university: 'Board of Technical Examinations, Karnataka',
-    period: '2019 - 2022',
-    details: 'Specialized in Software Development',
-  },
-  {
-    degree: 'Pre University Course',
-    institution: 'Vidyanikethan PU College',
-    university: 'Karnataka PU Board',
-    period: '2017 - 2019',
-    details: 'PCMB Stream',
-  },
-];
-
-// Experience Data
-const experienceData = [
-  {
-    title: 'Java Developer Intern',
-    company: 'SNYCE Automations',
-    period: '2025',
-    description: 'Worked on a Spring Boot application to build RESTful APIs for CRUD operations, integrating with <strong class="text-green-400">MySQL</strong>. Focused on designing clean services, DTOs, and unit-tested controllers.'
-  },
-  {
-    title: 'Student Ambassador & DevOps Intern',
-    company: 'Rooman Technologies',
-    period: '2024-2025',
-    description: 'Represented Rooman on campus and supported community initiatives. As a DevOps intern contributed to CI/CD pipelines and automation tasks that improved deployment reliability.'
-  },
-  {
-    title: 'Cybersecurity & Cloud Developer Intern',
-    company: 'TechByHeart',
-    period: '2023',
-    description: 'Focused on cloud-native secure deployments and security audits. Helped implement hardening guidelines and automated security scans for microservices.'
+const formatExperienceDescription = (job) => {
+  let html = `<p>${job.impact}</p>`;
+  if (job.responsibilities && job.responsibilities.length > 0) {
+    html += `<ul class="list-disc pl-5 mt-3 space-y-1 text-sm text-gray-400">`;
+    job.responsibilities.forEach(resp => {
+      html += `<li>${resp}</li>`;
+    });
+    html += `</ul>`;
   }
-];
-
-const summaryText = 'With a strong foundation in <strong>Java, Python, React, Spring Boot, MySQL, Firebase, and Flutter</strong>, I build scalable and user-friendly applications across mobile and web. I enjoy designing APIs and backend systems as much as crafting polished UIs — this blend lets me ship end-to-end solutions from prototype to production. Collaboration, curiosity and continuous learning guide my approach to engineering and product design.';
+  if (job.technologies && job.technologies.length > 0) {
+    html += `<div class="mt-4 flex flex-wrap gap-2">`;
+    job.technologies.forEach(tech => {
+      html += `<span class="px-2 py-0.5 text-xs rounded bg-green-500/10 text-green-400 border border-green-500/20">${tech}</span>`;
+    });
+    html += `</div>`;
+  }
+  return html;
+};
 
 const About = () => {
 
@@ -80,7 +52,7 @@ const About = () => {
                 <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-center">Who I Am</h2>
                 <p 
                   className="text-lg text-gray-300 leading-relaxed text-justify"
-                  dangerouslySetInnerHTML={{ __html: summaryText }}
+                  dangerouslySetInnerHTML={{ __html: profile.summary }}
                 />
               </div>
             </RevealOnScroll>
@@ -93,13 +65,13 @@ const About = () => {
             <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
             {/* Use the generic timeline wrapper class */}
             <div className="timeline-wrapper">
-              {experienceData.map((job) => (
+              {experience.map((job) => (
                 <ExperienceCard
-                  key={job.title}
-                  title={job.title}
+                  key={job.company + job.role}
+                  title={job.role}
                   company={job.company}
-                  period={job.period}
-                  description={job.description}
+                  period={job.duration}
+                  description={formatExperienceDescription(job)}
                 />
               ))}
             </div>
@@ -112,16 +84,50 @@ const About = () => {
             <h2 className="text-3xl font-bold text-center mb-16">Education Timeline</h2>
             {/* Use the generic timeline wrapper class */}
             <div className="timeline-wrapper">
-              {educationData.map((edu) => (
+              {education.map((edu, index) => (
                 <EducationCard
-                  key={edu.institution}
+                  key={edu.school + edu.degree}
+                  index={index}
                   degree={edu.degree}
-                  institution={edu.institution}
-                  university={edu.university}
-                  period={edu.period}
-                  details={edu.details}
+                  institution={edu.school}
+                  university="KVG Institution / Board"
+                  period={edu.duration}
+                  details=""
                 />
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ACHIEVEMENTS & CERTIFICATIONS */}
+        <section className="section-about px-6 py-20 bg-[#0e0e14]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Achievements Column */}
+            <div>
+              <h2 className="text-3xl font-bold text-center mb-12">Achievements</h2>
+              <div className="space-y-4">
+                {achievements.map((ach, idx) => (
+                  <RevealOnScroll key={idx}>
+                    <div className="p-6 glass shadow-xl">
+                      <p className="text-gray-300 leading-relaxed">{ach}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+            </div>
+
+            {/* Certifications Column */}
+            <div>
+              <h2 className="text-3xl font-bold text-center mb-12">Certifications</h2>
+              <div className="space-y-4">
+                {certifications.map((cert, idx) => (
+                  <RevealOnScroll key={idx}>
+                    <div className="p-6 glass shadow-xl">
+                      <p className="text-gray-300 leading-relaxed">{cert}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
             </div>
           </div>
         </section>
