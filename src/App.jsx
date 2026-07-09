@@ -1,6 +1,6 @@
 // src/App.jsx
-import React, { useState, useEffect, useLayoutEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import HomeMain from "./pages/HomeMain";
 import ProjectsMain from "./pages/ProjectsMain";
@@ -9,28 +9,8 @@ import ContactsMain from "./pages/ContactsMain";
 import MediaMain from "./pages/MediaMain";
 import FloatingIsland from "./components/FloatingIsland";
 import WelcomeLoader from "./components/WelcomeLoader";
+import ScrollToTop from "./components/ScrollToTop";
 import "./components/FloatingIsland.css";
-
-/**
- * Clean ScrollToTop component that scrolls the window directly on route changes.
- */
-function ScrollToTop() {
-  const { pathname } = useLocation();
-
-  useLayoutEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      try {
-        window.history.scrollRestoration = "manual";
-      } catch { /* ignore */ }
-    }
-
-    requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
-    });
-  }, [pathname]);
-
-  return null;
-}
 
 const AppContent = () => {
   return (
