@@ -13,7 +13,7 @@ const Contacts = () => {
         Skip to contact form
       </a>
 
-      <main id="main-content" className="min-h-screen">
+      <div id="main-content" className="min-h-screen">
         <ContactHero />
 
         {/* Contact Content */}
@@ -28,7 +28,7 @@ const Contacts = () => {
 
           </div>
         </section>
-      </main>
+      </div>
 
       <Footer />
     </div>

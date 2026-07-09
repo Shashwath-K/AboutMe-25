@@ -41,7 +41,7 @@ const About = () => {
   return (
     <div className="bg-[#0e0e14] text-white font-inter">
       <a className="sr-only focus:not-sr-only p-2 m-2 rounded bg-green-600" href="#main-content">Skip to content</a>
-      <main id="main-content" className="min-h-screen" role="main">
+      <div id="main-content" className="min-h-screen" role="main">
         <AboutHero />
 
         {/* SUMMARY */}
@@ -131,7 +131,7 @@ const About = () => {
             </div>
           </div>
         </section>
-      </main>
+      </div>
       <Footer />
     </div>
   );

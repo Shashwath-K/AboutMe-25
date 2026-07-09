@@ -184,7 +184,7 @@ const MediaMain = () => {
   
   return (
     <>
-      <main id="main-content">
+      <div id="main-content" className="min-h-screen">
         <MediaHero />
         <div className="gallery-container container text-center">
           <MediaCategories
@@ -201,7 +201,7 @@ const MediaMain = () => {
           />
         </div>
         <Footer />
-      </main>
+      </div>
       
       {/* The lightbox is rendered here when an image is selected */}
       {selectedImage && (

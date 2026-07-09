@@ -47,7 +47,7 @@ const ProjectsMain = () => {
 
   return (
     <div className="bg-black text-white font-inter">
-      <main id="main-content" className="min-h-screen">
+      <div id="main-content" className="min-h-screen">
         {/* Hero Section */}
         <ProjectHero />
         {/* Projects Section */}
@@ -72,7 +72,7 @@ const ProjectsMain = () => {
             );
           })}
         </div>
-      </main>
+      </div>
 
       <Footer />
     </div>
