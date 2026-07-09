@@ -1,4 +1,4 @@
-/* src/components/FloatingIsland.css (Complete & Modified) */
+/* src/components/FloatingIsland.css (Complete & Cleaned) */
 
 /* --- Keyframe for the active icon's pulse --- */
 @keyframes active-pulse {
@@ -59,8 +59,8 @@
   display: block;
 }
 
-/* --- Navigation Links --- */
-.floating-island li a {
+/* --- Navigation Buttons --- */
+.floating-island li .nav-btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -77,7 +77,7 @@
 }
 
 /* --- Active & Hover States --- */
-.floating-island li a.active {
+.floating-island li .nav-btn.active {
   background-color: #22c55e; /* THEME: Vibrant green */
   color: #ffffff;
   transform: scale(1.05); /* Slightly smaller active scale */
@@ -85,7 +85,7 @@
   animation: active-pulse 2s infinite cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.floating-island li a:not(.active):hover {
+.floating-island li .nav-btn:not(.active):hover {
   background-color: rgba(34, 197, 94, 0.15);
   color: #e5e5e5;
   transform: scale(1.1);
@@ -113,36 +113,8 @@
   pointer-events: none;
   transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
-/* Ensure the button behaves like the old link */
-.nav-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: none;
-  background: transparent;
-  color: #a3a3a3;
-  cursor: pointer;
-  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-}
 
-.nav-btn.active {
-  background-color: #22c55e;
-  color: #fff;
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
-  animation: active-pulse 2s infinite cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.nav-btn:hover:not(.active) {
-  background-color: rgba(34, 197, 94, 0.15);
-  color: #e5e5e5;
-  transform: scale(1.1);
-}
-
-.floating-island li a:hover .nav-tooltip {
+.floating-island li .nav-btn:hover .nav-tooltip {
   opacity: 1;
   visibility: visible;
   transform: translateX(50%) translateY(0px); /* Animate into view */
@@ -185,7 +157,7 @@
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7), 
                 inset 0 0 15px rgba(34, 197, 94, 0.2);
   }
-
+ 
   /* 5. Override layout to Vertical */
   .floating-island ul {
     flex-direction: column;
@@ -193,7 +165,7 @@
   }
 
   /* 6. Override icon/button size */
-  .floating-island li a {
+  .floating-island li .nav-btn {
     width: 44px;
     height: 44px;
   }
@@ -209,15 +181,15 @@
     transform: translateY(-50%) translateX(15px); /* Start pos */
   }
 
-  .floating-island li a:hover .nav-tooltip {
+  .floating-island li .nav-btn:hover .nav-tooltip {
     transform: translateY(-50%) translateX(0px); /* End pos */
   }
 
   /* 8. Restore desktop active/hover scale */
-  .floating-island li a.active {
+  .floating-island li .nav-btn.active {
     transform: scale(1.1);
   }
-  .floating-island li a:not(.active):hover {
+  .floating-island li .nav-btn:not(.active):hover {
     transform: scale(1.15);
   }
 }
