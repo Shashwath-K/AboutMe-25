@@ -91,20 +91,17 @@
   .about-dashboard-grid {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
-  .about-hud-sidebar {
-    grid-column: span 4;
-    position: sticky;
-    top: 92px;
-    height: calc(100vh - 120px);
-    overflow-y: auto;
-    scrollbar-width: none; /* Hide scrollbar for clean UI */
-  }
-  .about-hud-sidebar::-webkit-scrollbar {
-    display: none;
-  }
   .about-dossier-content {
-    grid-column: span 8;
+    grid-column: span 12;
+    max-width: 900px;
+    margin: 0 auto;
   }
+}
+
+.about-dossier-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
 }
 
 /* --- HUD Left Profile Panel --- */
@@ -476,16 +473,23 @@
 }
 
 /* --- Merits & Badges Dashboard --- */
+.about-credentials-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .about-credentials-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
 .credentials-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: 1.25rem;
-}
-
-@media (min-width: 640px) {
-  .credentials-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
 }
 
 .badge-card {
