@@ -1,41 +1,50 @@
 import React from 'react';
 import { SiVercel, SiReact, SiVite } from 'react-icons/si';
 
-// Import the CSS that defines the '.pill' class if not imported globally
-// import '../components/styles/projects.css'; 
+import '../components/styles/projects.css'; // Ensure .pill class is loaded
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <footer id="contact" className="footer glass rounded-t-[20%]">
-      <div className="container flex flex-col items-center py-10 px-6 space-y-6 text-center">
+    <footer id="contact" className="footer glass rounded-t-[20%] mt-20">
+      <div className="container flex flex-col items-center py-10 px-6 space-y-8 text-center">
         
         {/* Call to action */}
-        <div>
-          <h3 className="text-white text-xl font-semibold mb-2">Let’s build something great</h3>
-          <br/>
+        <div className="mb-2">
+          <h3 className="text-white text-xl font-semibold mb-3">Let’s build something great</h3>
           <p className="text-sm text-gray-400">Open to freelance, collaborations & full-time roles</p>
         </div>
-        <br/>
+        
         {/* Divider */}
-        <div className="w-full h-px bg-white/10"></div>
+        <div className="w-full max-w-md h-px bg-white/10 my-6"></div>
 
         {/* Copyright and Credits */}
-        <div className="text-xs flex flex-col items-center justify-center gap-y-4">
+        <div className="flex flex-col items-center justify-center gap-y-10 w-full mt-6">
+          
+          {/* Copyright */}
+          <p className="text-xs text-gray-500">
+            © {currentYear} Shashwath K S. All rights reserved.
+          </p>
+
           {/* Pills container */}
-          <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+          <div 
+            className="flex flex-row flex-wrap items-center justify-center w-full"
+            style={{ gap: '1.5rem', marginTop: '1rem' }}
+          >
             
-            {/* Created with React & Vite - Uses .pill class */}
-            <span className="pill">
+            {/* Created with React & Vite */}
+            <span className="pill" style={{ margin: '0.5rem' }}>
               <span>Created with</span>
-              {/* Icons keep their brand color */}
-              <SiReact className="text-[#61DAFB]" title="React" />
+              <SiReact className="text-[#61DAFB]" size={14} title="React" />
               <span>&</span>
-              <SiVite className="text-[#646CFF]" title="Vite" />
+              <SiVite className="text-[#646CFF]" size={14} title="Vite" />
             </span>
-            <span className="opacity-0">|||||</span>
-            <span className="pill">
+            
+            {/* Deployed with Vercel */}
+            <span className="pill" style={{ margin: '0.5rem' }}>
               <span>Deployed with</span>
-              <SiVercel className="text-white" title="Vercel" />
+              <SiVercel className="text-white" size={14} title="Vercel" />
             </span>
 
           </div>
