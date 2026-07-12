@@ -4,7 +4,6 @@ import Footer from '../components/Footer';
 import AboutHero from './about/AboutHero.jsx';
 import RevealOnScroll from './about/RevealOnScroll.jsx';
 import { experience, education, achievements, certifications, profile } from '../data/portfolioData';
-import avatar from '../assets/avatar.JPG';
 import { 
   FaBriefcase, 
   FaGraduationCap, 
@@ -23,21 +22,6 @@ const techSkills = {
   frameworks: ["React.js", "Next.js", "Node.js", "Express", "React Native", "Flutter"],
   ai: ["PyTorch", "TensorFlow", "OpenCV", "LangChain", "Hugging Face"],
   databases: ["MongoDB", "PostgreSQL", "SQLite", "Firebase", "Docker", "Git"]
-};
-
-// Competency indicator progress bar
-const CompetencyRow = ({ label, percentage }) => {
-  return (
-    <div className="hud-metric-row">
-      <div className="hud-metric-header font-mono text-[10px] sm:text-xs">
-        <span className="hud-metric-label text-gray-300">{label}</span>
-        <span className="hud-metric-value font-bold">{percentage}%</span>
-      </div>
-      <div className="hud-metric-track">
-        <div className="hud-metric-fill" style={{ width: `${percentage}%` }}></div>
-      </div>
-    </div>
-  );
 };
 
 // Matrix Cipher Text Decryption Component
@@ -242,41 +226,6 @@ const About = () => {
         {/* Dossier Dashboard Layout */}
         <div className="about-dashboard-grid animate-fade-in">
           
-          {/* LEFT: Cyber Profile HUD Sidebar */}
-          <aside className="about-hud-sidebar space-y-6">
-            <RevealOnScroll>
-              <div className="hud-profile-card text-center">
-                
-                {/* Scanner Avatar */}
-                <div className="avatar-hud-wrapper">
-                  <img src={avatar} alt="Shashwath KS avatar" className="avatar-hud-image" />
-                  <div className="avatar-scanner-line"></div>
-                </div>
-
-                <h2 className="text-2xl font-bold tracking-tight mb-1 text-white">Shashwath K S</h2>
-                <p className="text-green-400 font-mono text-sm tracking-widest uppercase mb-4">AI Eng & Full Stack Dev</p>
-                
-                {/* Pulse Status */}
-                <div className="hud-status-badge">
-                  <span className="hud-pulse-dot"></span>
-                  <span>SYSTEMS: ONLINE</span>
-                </div>
-
-                {/* Focus Allocation Metrics */}
-                <div className="mt-8 text-left">
-                  <h3 className="font-mono text-xs text-gray-500 uppercase tracking-widest mb-4">Focus Allocation</h3>
-                  <div className="hud-metrics-container">
-                    <CompetencyRow label="AI & Machine Learning" percentage={85} />
-                    <CompetencyRow label="Full-Stack Web Architectures" percentage={90} />
-                    <CompetencyRow label="Mobile App Engineering" percentage={85} />
-                    <CompetencyRow label="DevSecOps & Databases" percentage={80} />
-                  </div>
-                </div>
-
-              </div>
-            </RevealOnScroll>
-          </aside>
-
           {/* RIGHT: Dossier Content Column */}
           <section className="about-dossier-content space-y-12">
             
@@ -430,7 +379,7 @@ const About = () => {
             </RevealOnScroll>
 
             {/* Merits & Credentials Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="about-credentials-container">
               
               {/* Achievements Column */}
               <RevealOnScroll>
