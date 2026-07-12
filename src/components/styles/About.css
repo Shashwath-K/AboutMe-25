@@ -582,3 +582,131 @@
     transform: translateY(0);
   }
 }
+
+/* --- Interactive Terminal Extensions --- */
+.terminal-history-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 153, 0.2) transparent;
+}
+.terminal-history-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.terminal-history-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 153, 0.3);
+  border-radius: 2px;
+}
+.terminal-history-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.terminal-shortcuts-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(0, 255, 153, 0.15);
+}
+
+.terminal-shortcut-btn {
+  background: rgba(0, 255, 153, 0.04);
+  border: 1px solid rgba(0, 255, 153, 0.2);
+  color: #a3a3a3;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.terminal-shortcut-btn:hover {
+  background: rgba(0, 255, 153, 0.12);
+  color: #00ff99;
+  border-color: #00ff99;
+  box-shadow: 0 0 8px rgba(0, 255, 153, 0.25);
+}
+
+/* --- Technology Grid & Chips --- */
+.tech-section-card {
+  background: rgba(20, 20, 25, 0.6);
+  border: var(--hud-border);
+  border-radius: 16px;
+  padding: 1.75rem;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: var(--glass-shadow);
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.tech-section-card:hover {
+  border: var(--hud-border-hover);
+  box-shadow: 0 10px 45px rgba(0, 255, 153, 0.03);
+}
+
+.tech-group-title {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: #737373;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+}
+
+.tech-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.tech-chip {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: #d4d4d4;
+  font-family: monospace;
+  font-size: 0.8rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tech-chip:hover {
+  background: rgba(0, 255, 153, 0.06);
+  border-color: rgba(0, 255, 153, 0.3);
+  color: #00ff99;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 255, 153, 0.1);
+}
+
+.tech-chip-icon {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.3);
+  transition: color 0.3s ease;
+}
+
+.tech-chip:hover .tech-chip-icon {
+  color: #00ff99;
+}
+
+/* --- Decryption Animation states --- */
+.badge-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.decrypting-text {
+  font-family: monospace;
+  transition: color 0.2s ease;
+}
+
+.badge-card:hover .decrypting-text {
+  color: #00ff99;
+  text-shadow: 0 0 6px rgba(0, 255, 153, 0.4);
+}
+

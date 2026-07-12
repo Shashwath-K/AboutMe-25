@@ -17,6 +17,14 @@ import {
 } from 'react-icons/fa';
 import '../components/styles/About.css';
 
+// Technologies data mapping
+const techSkills = {
+  languages: ["JavaScript", "TypeScript", "Python", "Java", "Dart", "HTML & CSS"],
+  frameworks: ["React.js", "Next.js", "Node.js", "Express", "React Native", "Flutter"],
+  ai: ["PyTorch", "TensorFlow", "OpenCV", "LangChain", "Hugging Face"],
+  databases: ["MongoDB", "PostgreSQL", "SQLite", "Firebase", "Docker", "Git"]
+};
+
 // Competency indicator progress bar
 const CompetencyRow = ({ label, percentage }) => {
   return (
@@ -32,48 +40,133 @@ const CompetencyRow = ({ label, percentage }) => {
   );
 };
 
-// Mock Terminal Console Component
-const TerminalConsole = () => {
-  const [typedText, setTypedText] = useState("");
-  const [showOutput, setShowOutput] = useState(false);
-  const commandText = "cat profile.json";
+// Matrix Cipher Text Decryption Component
+const DecryptText = ({ text }) => {
+  const [displayText, setDisplayText] = useState(text);
+  const [isDecrypting, setIsDecrypting] = useState(false);
 
-  useEffect(() => {
-    let currentText = "";
-    let index = 0;
+  const triggerDecryption = () => {
+    if (isDecrypting) return;
+    setIsDecrypting(true);
+
+    const chars = '01ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿ@#$%&?*';
+    const originalText = text;
+    let iterations = 0;
+
     const interval = setInterval(() => {
-      if (index < commandText.length) {
-        currentText += commandText.charAt(index);
-        setTypedText(currentText);
-        index++;
-      } else {
-        clearInterval(interval);
-        setTimeout(() => setShowOutput(true), 600);
-      }
-    }, 75);
+      setDisplayText(() =>
+        originalText
+          .split("")
+          .map((char, index) => {
+            if (char === " ") return " ";
+            if (index < iterations) {
+              return originalText[index];
+            }
+            return chars.charAt(Math.floor(Math.random() * chars.length));
+          })
+          .join("")
+      );
 
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleReRun = () => {
-    setTypedText("");
-    setShowOutput(false);
-    let currentText = "";
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < commandText.length) {
-        currentText += commandText.charAt(index);
-        setTypedText(currentText);
-        index++;
-      } else {
+      iterations += 1/2; // speed controls how fast characters decode
+      if (iterations >= originalText.length) {
         clearInterval(interval);
-        setTimeout(() => setShowOutput(true), 600);
+        setDisplayText(originalText);
+        setIsDecrypting(false);
       }
-    }, 75);
+    }, 25);
   };
 
+  useEffect(() => {
+    triggerDecryption();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div className="terminal-console">
+    <span 
+      className="decrypting-text cursor-default"
+      onMouseEnter={triggerDecryption}
+    >
+      {displayText}
+    </span>
+  );
+};
+
+// Upgraded Interactive Terminal Console Component
+const TerminalConsole = () => {
+  const [history, setHistory] = useState([]);
+  const [typedText, setTypedText] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
+
+  const commandTextMap = {
+    help: `Available commands:
+  - profile: View structural profile JSON metadata.
+  - experience: Summarize professional history.
+  - education: Summarize education and academic track.
+  - clear: Reset terminal and command logs.`,
+    
+    profile: `{
+  "name": "Shashwath K S",
+  "role": "AI Engineer & Full-Stack Developer",
+  "track": "M.Tech in Artificial Intelligence",
+  "university": "REVA University, Bangalore",
+  "languages": ["JavaScript", "TypeScript", "Python", "Java", "Dart"],
+  "experience_years": 3,
+  "active_status": "Systems: Online / Operational"
+}`,
+
+    experience: `- Lead AI & Mobile Developer at SNYCE Automations (2024 - Present)
+  * Integrated NLP models and offline-first mobile apps.
+- Web Developer Intern at Rooman Technologies (2023 - 2024)
+  * Refactored responsive corporate dashboards.
+- Project Intern at TechByHeart (2022 - 2023)
+  * Developed flutter packages and BLE communication code.`,
+
+    education: `- M.Tech in Artificial Intelligence
+  * REVA University, Bangalore (2023 - 2025)
+- B.E. in Computer Science & Engineering
+  * K.V.G College of Engineering, Sullia (2018 - 2022)`,
+  };
+
+  const runCommand = (cmd) => {
+    if (isTyping) return;
+    setIsTyping(true);
+    setTypedText("");
+
+    let currentText = "";
+    let idx = 0;
+    const interval = setInterval(() => {
+      if (idx < cmd.length) {
+        currentText += cmd.charAt(idx);
+        setTypedText(currentText);
+        idx++;
+      } else {
+        clearInterval(interval);
+        setTimeout(() => {
+          if (cmd === 'clear') {
+            setHistory([]);
+          } else {
+            const outText = commandTextMap[cmd] || `bash: command not found: ${cmd}. Type 'help' for options.`;
+            setHistory((prev) => [
+              ...prev,
+              { type: 'input', text: cmd },
+              { type: 'output', text: outText }
+            ]);
+          }
+          setTypedText("");
+          setIsTyping(false);
+        }, 300);
+      }
+    }, 45);
+  };
+
+  useEffect(() => {
+    setHistory([]);
+    runCommand('profile');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div className="terminal-console text-left">
       <div className="terminal-header">
         <div className="terminal-dots">
           <div className="terminal-dot terminal-dot-red"></div>
@@ -81,31 +174,51 @@ const TerminalConsole = () => {
           <div className="terminal-dot terminal-dot-green"></div>
         </div>
         <div className="terminal-title font-mono text-[10px] sm:text-xs">bash - guest@shashwath</div>
-        <button className="terminal-action-btn font-mono" onClick={handleReRun}>
-          Re-run
+        <button className="terminal-action-btn font-mono" onClick={() => runCommand('help')}>
+          Help
         </button>
       </div>
-      <div className="terminal-body text-left">
-        <p className="m-0 flex items-center">
-          <span className="terminal-input-prompt font-mono">guest@shashwath:~$</span>
-          <span className="terminal-input-cmd font-mono text-white ml-2">{typedText}</span>
-          {!showOutput && <span className="terminal-cursor"></span>}
-        </p>
-        {showOutput && (
-          <pre className="terminal-output mt-4 animate-fade-in font-mono text-[#00ff99] leading-relaxed text-xs sm:text-sm">
-{`{`}
-{"\n"}  <span className="terminal-json-key">"name"</span>: <span className="terminal-json-string">"Shashwath K S"</span>,
-{"\n"}  <span className="terminal-json-key">"role"</span>: <span className="terminal-json-string">"AI Engineer & Full-Stack Developer"</span>,
-{"\n"}  <span className="terminal-json-key">"track"</span>: <span className="terminal-json-string">"M.Tech in Artificial Intelligence"</span>,
-{"\n"}  <span className="terminal-json-key">"university"</span>: <span className="terminal-json-string">"REVA University, Bangalore"</span>,
-{"\n"}  <span className="terminal-json-key">"languages"</span>: [
-{"\n"}    <span className="terminal-json-string">"JavaScript"</span>, <span className="terminal-json-string">"TypeScript"</span>, <span className="terminal-json-string">"Python"</span>, <span className="terminal-json-string">"Java"</span>, <span className="terminal-json-string">"Dart"</span>
-{"\n"}  ],
-{"\n"}  <span className="terminal-json-key">"experience_years"</span>: <span className="terminal-json-number">3</span>,
-{"\n"}  <span className="terminal-json-key">"active_status"</span>: <span className="terminal-json-string">"Systems: Online / Operational"</span>
-{"\n"}{`}`}
-          </pre>
-        )}
+
+      <div className="terminal-body font-mono text-xs sm:text-sm">
+        <div className="terminal-history-scroll space-y-3">
+          {history.map((item, idx) => (
+            <div key={idx} className="space-y-1">
+              {item.type === 'input' ? (
+                <p className="m-0 flex items-center">
+                  <span className="terminal-input-prompt font-mono">guest@shashwath:~$</span>
+                  <span className="terminal-input-cmd font-mono text-white ml-2">{item.text}</span>
+                </p>
+              ) : (
+                <pre className="terminal-output m-0 text-[#00ff99] leading-relaxed whitespace-pre-wrap pl-4 border-l border-green-500/10">
+                  {item.text}
+                </pre>
+              )}
+            </div>
+          ))}
+
+          {isTyping && (
+            <p className="m-0 flex items-center">
+              <span className="terminal-input-prompt font-mono">guest@shashwath:~$</span>
+              <span className="terminal-input-cmd font-mono text-white ml-2">{typedText}</span>
+              <span className="terminal-cursor"></span>
+            </p>
+          )}
+        </div>
+
+        {/* Console command shortcut trigger panel */}
+        <div className="terminal-shortcuts-container">
+          <span className="text-[10px] text-gray-500 font-mono self-center mr-2 uppercase tracking-wide">Execute:</span>
+          {['profile', 'experience', 'education', 'clear'].map((cmd) => (
+            <button
+              key={cmd}
+              disabled={isTyping}
+              className="terminal-shortcut-btn"
+              onClick={() => runCommand(cmd)}
+            >
+              {cmd}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -127,7 +240,7 @@ const About = () => {
         <AboutHero />
 
         {/* Dossier Dashboard Layout */}
-        <div className="about-dashboard-grid">
+        <div className="about-dashboard-grid animate-fade-in">
           
           {/* LEFT: Cyber Profile HUD Sidebar */}
           <aside className="about-hud-sidebar space-y-6">
@@ -167,11 +280,11 @@ const About = () => {
           {/* RIGHT: Dossier Content Column */}
           <section className="about-dossier-content space-y-12">
             
-            {/* Command Terminal Section */}
+            {/* Interactive Command Terminal Section */}
             <RevealOnScroll>
               <div>
                 <h3 className="text-xs font-mono text-green-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                  <FaTerminal className="text-[10px]" /> Profile Diagnostics
+                  <FaTerminal className="text-[10px]" /> Interactive Console
                 </h3>
                 <TerminalConsole />
               </div>
@@ -190,6 +303,61 @@ const About = () => {
               </div>
             </RevealOnScroll>
 
+            {/* Core Technology Stack */}
+            <RevealOnScroll>
+              <div className="tech-section-card">
+                <h3 className="text-xs font-mono text-green-400 uppercase tracking-widest mb-6 flex items-center gap-2">
+                  <FaCode className="text-[10px]" /> Technology Arsenal
+                </h3>
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="tech-group-title">Languages</h4>
+                    <div className="tech-grid">
+                      {techSkills.languages.map(tech => (
+                        <span key={tech} className="tech-chip">
+                          <FaCode className="tech-chip-icon" />
+                          <span>{tech}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="tech-group-title">Frameworks & Libraries</h4>
+                    <div className="tech-grid">
+                      {techSkills.frameworks.map(tech => (
+                        <span key={tech} className="tech-chip">
+                          <FaCode className="tech-chip-icon" />
+                          <span>{tech}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="tech-group-title">AI & ML Engineering</h4>
+                    <div className="tech-grid">
+                      {techSkills.ai.map(tech => (
+                        <span key={tech} className="tech-chip">
+                          <FaCode className="tech-chip-icon" />
+                          <span>{tech}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="tech-group-title">Databases & Tooling</h4>
+                    <div className="tech-grid">
+                      {techSkills.databases.map(tech => (
+                        <span key={tech} className="tech-chip">
+                          <FaCode className="tech-chip-icon" />
+                          <span>{tech}</span>
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </RevealOnScroll>
+
             {/* Service Record (Experience) */}
             <RevealOnScroll>
               <div className="hud-profile-card">
@@ -200,10 +368,8 @@ const About = () => {
                 <div className="cyber-timeline">
                   {experience.map((job) => (
                     <div key={job.company + job.role} className="cyber-timeline-item">
-                      {/* Timeline Node */}
                       <div className="cyber-timeline-node"></div>
                       
-                      {/* Card Content */}
                       <div className="cyber-timeline-card">
                         <FaBriefcase className="cyber-timeline-icon" />
                         <h3>{job.role}</h3>
@@ -247,10 +413,8 @@ const About = () => {
                 <div className="cyber-timeline">
                   {education.map((edu) => (
                     <div key={edu.school + edu.degree} className="cyber-timeline-item">
-                      {/* Timeline Node */}
                       <div className="cyber-timeline-node"></div>
 
-                      {/* Card Content */}
                       <div className="cyber-timeline-card">
                         <FaGraduationCap className="cyber-timeline-icon" />
                         <h3>{edu.degree}</h3>
@@ -280,7 +444,9 @@ const About = () => {
                         <div className="badge-icon-wrapper">
                           <FaAward />
                         </div>
-                        <p className="badge-text text-left">{ach}</p>
+                        <p className="badge-text text-left">
+                          <DecryptText text={ach} />
+                        </p>
                       </div>
                     ))}
                   </div>
@@ -299,7 +465,9 @@ const About = () => {
                         <div className="badge-icon-wrapper">
                           <FaShieldAlt />
                         </div>
-                        <p className="badge-text text-left">{cert}</p>
+                        <p className="badge-text text-left">
+                          <DecryptText text={cert} />
+                        </p>
                       </div>
                     ))}
                   </div>
