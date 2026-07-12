@@ -62,14 +62,20 @@ const Lightbox = ({ item, onClose }) => {
 
 // --- Sub-component: MediaHero ---
 
+const MatrixColumns = () => (
+  <>
+    {Array.from({ length: 40 }).map((_, index) => (
+      <div className="matrix-column" key={index}></div>
+    ))}
+  </>
+);
+
 const MediaHero = () => (
   <div className="page-hero-container">
     <div className="hero-section">
-      <div className="matrix-container">
+      <div className="matrix-container absolute inset-0 z-0 pointer-events-none">
         <div className="matrix-pattern">
-          {[...Array(28)].map((_, idx) => (
-            <div key={idx} className="matrix-column"></div>
-          ))}
+          <MatrixColumns />
         </div>
       </div>
       <div className="hero-bg-overlay" />
