@@ -12,9 +12,42 @@ import {
   FaCalendarAlt,
   FaShieldAlt,
   FaCode,
-  FaTerminal
+  FaTerminal,
+  FaJava,
+  FaDatabase,
+  FaServer,
+  FaNetworkWired,
+  FaSyncAlt,
+  FaTools,
+  FaGitAlt,
+  FaLinux,
+  FaCloud,
+  FaLock,
+  FaRobot,
+  FaCubes
 } from 'react-icons/fa';
 import '../components/styles/About.css';
+
+// Helper function for mapping technologies to specific icons
+const getTechIcon = (tech) => {
+  const iconProps = { className: "text-[#00ff99]", size: 14 };
+  const lowerTech = tech.toLowerCase();
+  
+  if (lowerTech.includes('java')) return <FaJava {...iconProps} />;
+  if (lowerTech.includes('spring')) return <FaServer {...iconProps} />;
+  if (lowerTech.includes('mysql') || lowerTech.includes('database')) return <FaDatabase {...iconProps} />;
+  if (lowerTech.includes('api') || lowerTech.includes('rest')) return <FaNetworkWired {...iconProps} />;
+  if (lowerTech.includes('ci/cd')) return <FaSyncAlt {...iconProps} />;
+  if (lowerTech.includes('devops')) return <FaTools {...iconProps} />;
+  if (lowerTech.includes('git')) return <FaGitAlt {...iconProps} />;
+  if (lowerTech.includes('linux')) return <FaLinux {...iconProps} />;
+  if (lowerTech.includes('cloud')) return <FaCloud {...iconProps} />;
+  if (lowerTech.includes('security')) return <FaLock {...iconProps} />;
+  if (lowerTech.includes('automation')) return <FaRobot {...iconProps} />;
+  if (lowerTech.includes('microservices')) return <FaCubes {...iconProps} />;
+  
+  return <FaCode {...iconProps} />;
+};
 
 // Technologies data mapping
 const techSkills = {
@@ -339,7 +372,7 @@ const About = () => {
                             <div className="flex flex-wrap gap-5 mt-5">
                               {job.technologies.map((tech) => (
                                 <span key={tech} className="flex items-center gap-2 text-sm text-gray-300">
-                                  <FaCode className="text-[#00ff99]" size={14} />
+                                  {getTechIcon(tech)}
                                   <span>{tech}</span>
                                 </span>
                               ))}
