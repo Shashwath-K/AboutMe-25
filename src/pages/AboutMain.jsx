@@ -336,10 +336,11 @@ const About = () => {
                             </ul>
                           )}
                           {job.technologies && job.technologies.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-4">
+                            <div className="flex flex-wrap gap-5 mt-5">
                               {job.technologies.map((tech) => (
-                                <span key={tech} className="px-2 py-0.5 text-xs font-mono rounded bg-green-500/10 text-green-400 border border-green-500/20">
-                                  {tech}
+                                <span key={tech} className="flex items-center gap-2 text-sm text-gray-300">
+                                  <FaCode className="text-[#00ff99]" size={14} />
+                                  <span>{tech}</span>
                                 </span>
                               ))}
                             </div>
