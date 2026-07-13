@@ -313,16 +313,17 @@ const About = () => {
                               ))}
                             </ul>
                           )}
+                          <br />
                           {job.technologies && job.technologies.length > 0 && (
                             <div
-                              className="flex flex-wrap pt-4"
+                              className="flex flex-wrap mt-6"
                               style={{ gap: '0.75rem' }}
                             >
                               {job.technologies.map((tech) => (
                                 <span
                                   key={tech}
-                                  className="flex items-center gap-2 text-[0.8rem] font-mono text-[#00ff99] bg-[#00ff99]/[0.06] border border-[#00ff99]/20 px-5 py-2 rounded-full"
-                                  style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                                  className="inline-flex items-center justify-center gap-2 text-[0.8rem] font-mono text-[#00ff99] bg-[#00ff99]/[0.06] border border-[#00ff99]/20 rounded-full"
+                                  style={{ marginRight: '0.5rem', marginBottom: '0.5rem', padding: '0.65rem 1.25rem', lineHeight: 1 }}
                                 >
                                   {getTechIcon(tech)}
                                   <span>{tech}</span>
