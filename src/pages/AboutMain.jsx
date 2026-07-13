@@ -4,11 +4,11 @@ import Footer from '../components/Footer';
 import AboutHero from './about/AboutHero.jsx';
 import RevealOnScroll from './about/RevealOnScroll.jsx';
 import { experience, education, achievements, certifications, profile } from '../data/portfolioData';
-import { 
-  FaBriefcase, 
-  FaGraduationCap, 
-  FaAward, 
-  FaCertificate, 
+import {
+  FaBriefcase,
+  FaGraduationCap,
+  FaAward,
+  FaCertificate,
   FaCalendarAlt,
   FaShieldAlt,
   FaCode,
@@ -32,7 +32,7 @@ import '../components/styles/About.css';
 const getTechIcon = (tech) => {
   const iconProps = { className: "text-[#00ff99]", size: 14 };
   const lowerTech = tech.toLowerCase();
-  
+
   if (lowerTech.includes('java')) return <FaJava {...iconProps} />;
   if (lowerTech.includes('spring')) return <FaServer {...iconProps} />;
   if (lowerTech.includes('mysql') || lowerTech.includes('database')) return <FaDatabase {...iconProps} />;
@@ -45,7 +45,7 @@ const getTechIcon = (tech) => {
   if (lowerTech.includes('security')) return <FaLock {...iconProps} />;
   if (lowerTech.includes('automation')) return <FaRobot {...iconProps} />;
   if (lowerTech.includes('microservices')) return <FaCubes {...iconProps} />;
-  
+
   return <FaCode {...iconProps} />;
 };
 
@@ -84,7 +84,7 @@ const DecryptText = ({ text }) => {
           .join("")
       );
 
-      iterations += 1/2; // speed controls how fast characters decode
+      iterations += 1 / 2; // speed controls how fast characters decode
       if (iterations >= originalText.length) {
         clearInterval(interval);
         setDisplayText(originalText);
@@ -99,7 +99,7 @@ const DecryptText = ({ text }) => {
   }, []);
 
   return (
-    <span 
+    <span
       className="decrypting-text cursor-default"
       onMouseEnter={triggerDecryption}
     >
@@ -120,7 +120,7 @@ const TerminalConsole = () => {
   - experience: Summarize professional history.
   - education: Summarize education and academic track.
   - clear: Reset terminal and command logs.`,
-    
+
     profile: `{
   "name": "Shashwath K S",
   "role": "AI Engineer & Full-Stack Developer",
@@ -258,10 +258,10 @@ const About = () => {
 
         {/* Dossier Dashboard Layout */}
         <div className="about-dashboard-grid animate-fade-in">
-          
+
           {/* RIGHT: Dossier Content Column */}
           <section className="about-dossier-content space-y-12">
-            
+
             {/* Interactive Command Terminal Section */}
             <RevealOnScroll>
               <div>
@@ -278,65 +278,10 @@ const About = () => {
                 <h3 className="text-xs font-mono text-green-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                   <FaCode className="text-[10px]" /> Mission Log: Who I Am
                 </h3>
-                <p 
+                <p
                   className="text-base text-gray-300 leading-relaxed text-justify space-y-4"
                   dangerouslySetInnerHTML={{ __html: profile.summary }}
                 />
-              </div>
-            </RevealOnScroll>
-
-            {/* Core Technology Stack */}
-            <RevealOnScroll>
-              <div className="tech-section-card">
-                <h3 className="text-xs font-mono text-green-400 uppercase tracking-widest mb-6 flex items-center gap-2">
-                  <FaCode className="text-[10px]" /> Technology Arsenal
-                </h3>
-                <div className="space-y-6">
-                  <div>
-                    <h4 className="tech-group-title">Languages</h4>
-                    <div className="tech-grid">
-                      {techSkills.languages.map(tech => (
-                        <span key={tech} className="tech-chip">
-                          <FaCode className="tech-chip-icon" />
-                          <span>{tech}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="tech-group-title">Frameworks & Libraries</h4>
-                    <div className="tech-grid">
-                      {techSkills.frameworks.map(tech => (
-                        <span key={tech} className="tech-chip">
-                          <FaCode className="tech-chip-icon" />
-                          <span>{tech}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="tech-group-title">AI & ML Engineering</h4>
-                    <div className="tech-grid">
-                      {techSkills.ai.map(tech => (
-                        <span key={tech} className="tech-chip">
-                          <FaCode className="tech-chip-icon" />
-                          <span>{tech}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className="tech-group-title">Databases & Tooling</h4>
-                    <div className="tech-grid">
-                      {techSkills.databases.map(tech => (
-                        <span key={tech} className="tech-chip">
-                          <FaCode className="tech-chip-icon" />
-                          <span>{tech}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
               </div>
             </RevealOnScroll>
 
@@ -346,12 +291,12 @@ const About = () => {
                 <h3 className="text-xs font-mono text-green-400 uppercase tracking-widest mb-8 flex items-center gap-2">
                   <FaBriefcase className="text-[10px]" /> Professional Service Record
                 </h3>
-                
+
                 <div className="cyber-timeline">
                   {experience.map((job) => (
                     <div key={job.company + job.role} className="cyber-timeline-item">
                       <div className="cyber-timeline-node"></div>
-                      
+
                       <div className="cyber-timeline-card">
                         <FaBriefcase className="cyber-timeline-icon" />
                         <h3>{job.role}</h3>
@@ -369,14 +314,14 @@ const About = () => {
                             </ul>
                           )}
                           {job.technologies && job.technologies.length > 0 && (
-                            <div 
-                              className="flex flex-wrap pt-4" 
+                            <div
+                              className="flex flex-wrap pt-4"
                               style={{ gap: '0.75rem' }}
                             >
                               {job.technologies.map((tech) => (
-                                <span 
-                                  key={tech} 
-                                  className="flex items-center gap-2 text-[0.8rem] font-mono text-[#00ff99] bg-[#00ff99]/[0.06] border border-[#00ff99]/20 px-3 py-1.5 rounded-full"
+                                <span
+                                  key={tech}
+                                  className="flex items-center gap-2 text-[0.8rem] font-mono text-[#00ff99] bg-[#00ff99]/[0.06] border border-[#00ff99]/20 px-5 py-2 rounded-full"
                                   style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
                                 >
                                   {getTechIcon(tech)}
@@ -421,7 +366,7 @@ const About = () => {
 
             {/* Merits & Credentials Grid */}
             <div className="about-credentials-container">
-              
+
               {/* Achievements Column */}
               <RevealOnScroll>
                 <div className="hud-profile-card h-full">
